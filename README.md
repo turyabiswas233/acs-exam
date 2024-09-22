@@ -22,7 +22,11 @@
  ```
  `Path`: `backend/.env.local`
  ```
- APP_URL=http://localhost:3000/
+ port=3000
+ MONGODB_URI=mongodb://localhost:27017/test
+ BASE_URL=http://localhost:5173,http://localhost:4173,http://10.0.0.151
+
+ NODE_ENV=development
  ```
  
 
