@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+ 
+select {
+    background-color: #070113dc;
+    border-radius: .5rem;
+    display: flex;
+
+}
+
+a.active {
+    @apply bg-blue-700/20 text-blue-400;
+}
+
+.chkbox {
+    @apply bg-transparent p-1 w-fit ring-2 ring-offset-1 ring-black rounded-full transition-colors;
+}
+
+.chkbox.a {
+    @apply bg-green-300 ring-green-600;
+}
+
+.policy {
+    @apply bg-white text-slate-900 p-5 m-10 rounded-lg shadow-xl shadow-slate-400/60;
+}
+
+.policy p {
+    @apply p-3;
+}
+
+.policy h2 {
+    @apply underline text-2xl font-semibold text-center;
+}
+
+.policy h3 {
+    @apply underline text-xl font-semibold;
+}
+
+.policy a {
+    @apply text-blue-500 font-thin hover:font-bold;
+}
+
+.policy ul {
+    @apply list-decimal px-10 space-y-3;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 0;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    @apply bg-slate-700;
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    @apply bg-blue-500 rounded-md;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-blue-400;
+}
+
+.bangla-font {
+    font-family: 'Bangla', sans-serif !important;
+}
+
+.poppins-regular {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.poppins-medium {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.poppins-semibold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.poppins-bold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+table.leader{
+    width: 100%;
+}
+table.leader td {
+    padding:12pt 5pt;
+    
+}
