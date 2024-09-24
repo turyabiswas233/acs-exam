@@ -16,6 +16,7 @@ import Services from "./components/services/index.jsx";
 
 import Question from "./components/services/Question.jsx";
 import ChallengeQuestion from "./components/services/ChallengeQuestion.jsx";
+import ExamPage from "./components/services/ExamPage.jsx";
 import Leaderboard from "./components/services/Leaderboard.jsx";
 import Error from "./Error.jsx";
 // admin info
@@ -75,6 +76,10 @@ const routerConfig = createBrowserRouter([
           {
             path: "exam/challenge",
             element: <ChallengeQuestion />,
+          },
+          {
+            path: "exam/:id",
+            element: <ExamPage />,
           },
           {
             path: "leaderboard",
