@@ -51,7 +51,7 @@ function Signup() {
                 if (us.displayName)
                   await axios
                     .post(
-                      `${DB_URL}sadmin/auth/singup`,
+                      `${DB_URL}/admin/auth/singup`,
                       {
                         uid: us?.uid,
                         email: us?.email,

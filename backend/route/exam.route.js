@@ -30,10 +30,12 @@ router.get("/:_id", async (req, res) => {
         starttime: examInfo.starttime,
         endtime: examInfo.endtime,
         duration: examInfo.duration,
+        questype: examInfo.questype,
         totalQuestion: examInfo.questionsList?.length,
         questionsList: examInfo.questionsList.map((e) => {
           return {
             question: e.question,
+            type: e.questype,
             options: e.options.map((op) => {
               return {
                 id: op.id,
