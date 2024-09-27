@@ -68,7 +68,7 @@ function ExamPage() {
        <h1 className="mb-4 mt-7 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Demo Exam</h1>
        {questions}
 
-       <button className="btn-md btn btn-primary px-16 mt-5" > I am done </button>
+       <button className="btn-md btn btn-primary px-16 mt-5" > Finish Exam </button>
      </div>
   );
 }
