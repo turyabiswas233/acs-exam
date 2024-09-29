@@ -53,6 +53,11 @@ function ExamPage() {
 
   // const questions = [];
 
+  const finishExam = () => {
+    // redirect to after exam screen. For now, i am redirecting to home
+    window.location = "/"
+  }
+
   return (
      <div className="flex flex-col items-center bg-white w-full min-h-svh rounded-md p-5">
        <div className="flex justify-between w-full">
@@ -63,12 +68,12 @@ function ExamPage() {
             <span className="w-3 h-3 top-1/2 -right-16 -translate-y-1/2 mx-2 absolute rounded-full bg-red-500 custom-bounce"></span>
           </h2>
           <Timer start={true} limit={1*60*60+3*60}
-            setFinish={()=>{ }} />
+            setFinish={()=>{ finishExam }} />
        </div>
        <h1 className="mb-4 mt-7 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Demo Exam</h1>
        {questions}
 
-       <button className="btn-md btn btn-primary px-16 mt-5" > Finish Exam </button>
+       <button onClick={finishExam} className="btn-md btn btn-primary px-16 mt-5" > Finish Exam </button>
      </div>
   );
 }

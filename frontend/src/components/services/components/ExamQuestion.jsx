@@ -27,11 +27,11 @@ function Image({src, setRemoveImg}){
 }
 
 
-function CqAnswer(){
+function CqAnswer({examID, questionID}){
     
     const dummy = "https://media.istockphoto.com/id/1371256107/photo/the-turquoise-wave-water-background-of-summer-beach-at-the-seashore-and-beach-summer-pattern.jpg?s=612x612&w=is&k=20&c=mMF336_bIfYf0DYcH-JmZDJtMOJhAnDrbCqDTq-MbKA=";
     const [uploadedImages, setUploadedImages] = useState([]);
-    const [isUploaded, setIsUploaded] = useState(false);
+    const [isSubmited, setIsSubmited] = useState(false);
     
     // for upload store files, not urls
     const [formData, setFormDAta] = useState({examID: "Saikat", forms: []});
@@ -47,8 +47,13 @@ function CqAnswer(){
         }
     };
     const handleRemove = (imgSrc)=>{
-        setUploadedImages(uploadedImages.filter(img => img !== imgSrc))
+        setUploadedImages(uploadedImages.filter(img => img !== imgSrc));
     };
+
+    const submitAnswer = () => {
+        // api call using examID, questionID with uploadedImages
+        setIsSubmited(true);
+    }
 
     const images = uploadedImages.map( (imgSrc,i) => {
         return ( <Image key={i} src={imgSrc} setRemoveImg={ ()=>{handleRemove(imgSrc)} } /> );
@@ -60,9 +65,9 @@ function CqAnswer(){
                 {images}
                 { uploadedImages.length>0 &&
                     <input onClick={()=>{
-                        // api answer upload call
-                        setIsUploaded(true)
-                    }} type="button" className="btn btn-primary" value={isUploaded? 'Update' : 'Submit'}/> }
+                        submitAnswer();
+                        setIsUploaded(true);
+                    }} type="button" className="btn btn-primary" value={isSubmited? 'Update' : 'Submit'}/> }
             </div>
             <input
                 type="file" multiple={true}
@@ -74,6 +79,34 @@ function CqAnswer(){
 }
 
 
+function McqAnswer({examID, questionID, options}){
+
+    const [checkedAns, setCheckedAns] = useState([]);
+    const submitMCQ = ()=> {
+        // api call here, with examId questionID
+    };
+
+    const optionsComp = options.map((option, i) =>{
+        return (
+            <div key={i}
+            className="flex gap-3 hover:bg-gray-100 p-2"
+            onClick={ ()=> { setCheckedAns([...checkedAns, option.id]) } }>
+                <input type="checkbox" checked={checkedAns.includes(option.id)} onChange={()=>{}} className="checkbox checkbox-info border-2 border-sky-400" />
+                <p className="text-black" dangerouslySetInnerHTML={{__html: option.text}}/>
+            </div>
+        );
+    });
+
+    return (
+       <>
+            { optionsComp }
+            <div className="card-actions justify-end">
+                <button onClick={submitMCQ} className="btn-sm btn btn-primary px-3" disabled={checkedAns.length < 1}>Submit This</button>
+            </div>
+       </>
+    );
+}
+
 
 function ExamQuestion({
     examID = 10, // needed for submit 
@@ -81,30 +114,12 @@ function ExamQuestion({
     question,
 }){
 
-    const [checkedAns, setCheckedAns] = useState([]);
-
-    const options = question.options.map((option, i) =>{
-        return (
-               <div key={option.id}
-                className="flex gap-3 hover:bg-gray-100 p-2"
-                onClick={ ()=> {setCheckedAns([...checkedAns, option.id])} }>
-                    <input type="checkbox" checked={checkedAns.includes(option.id)} onChange={()=>{}} className="checkbox checkbox-info border-2 border-sky-400" />
-                    <p className="text-black" dangerouslySetInnerHTML={{__html: option.text}}/>
-                    {/* </div>Yes. I know the answer is {i+1}. </p> */}
-                </div>
-            );
-    });
-
-
     return (
         <div className="card bg-amber-50 w-full mt-3 shadow-md">
             <div className="card-body">
                 <h2 className="card-title text-black" > {questionNumber}. <span dangerouslySetInnerHTML={{ __html: question.question }} ></span> </h2>
-                { question.type == "mcq" && options}
-                { question.type == "cq" && <CqAnswer/> }
-                { question.type == "mcq" && (<div className="card-actions justify-end">
-                    <button className="btn-sm btn btn-primary px-3" disabled={checkedAns.length < 1}>Submit This</button>
-                </div>) }
+                { question.type == "cq" && <CqAnswer examID={examID} questionID={question.id} /> }
+                { question.type == "mcq" && <McqAnswer examID={examID} questionID={question.id} options={question.options}/>}
             </div>
         </div>
         
