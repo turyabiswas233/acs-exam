@@ -1,0 +1,6 @@
+id: turya.biswa@gmail.com
+pass: Turya9999
+
+icpc: bsse email
+pw: TuryaCoder)12
+
