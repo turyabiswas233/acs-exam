@@ -6,11 +6,14 @@ import ExamQuestion from "./components/ExamQuestion";
 import Timer from "./components/Timer";
 
 const API_URL = import.meta.env.APP_URL;
+
 function ExamPage() {
   const { id } = useParams();
 
   const { user, isAuthenticated } = useAuth();
-  const [data, setdata] = useState({});
+  const [ data, setdata ] = useState({});
+  const [ mcqAnswers, setMcqAnswers ] = useState([])
+
   const fetchQuestion = async () => {
     try {
       axios
@@ -48,7 +51,17 @@ function ExamPage() {
   const questions = dataloaded ? (
     data.questionsList.map((question, i) => {
       return (
-        <ExamQuestion key={i + 1} question={question} questionNumber={i + 1} />
+        <ExamQuestion
+            key={i + 1}
+            examID={id}
+            question={ question }
+            questionNumber={i + 1}
+            onUpdate = { (optionsIds)=>{
+                console.log(i+1) // question.id is undefined 
+                setMcqAnswers( [...mcqAnswers, { questionId: i, options: optionsIds }] );
+              }   
+            }
+        />
       );
     })
   ) : (
@@ -59,15 +72,30 @@ function ExamPage() {
 
   const finishExam = () => {
     // redirect to after exam screen. For now, i am redirecting to home
+    if ( data.questype == "mcq" ){
+        mcqAnswers.forEach( (ans) => {
+            const questionId = ans.questionId;
+            const optionsIds = ans.options;
+
+            // api call using id (examid), questionId, optionsId
+            //console.log(ans);
+        })
+
+        // clear mcq answers from local storage
+        data.questionsList.forEach( (q) =>{
+          const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
+          localStorage.removeItem(KEY_MCQ_ANSWERS);
+        })
+    };
     alert("Exam finished");
-    window.location = "/";
+    // window.location = "/";
   };
 
   return (
     <div className="flex flex-col items-center bg-white w-full min-h-svh rounded-md p-5">
       <div className="flex justify-between w-full">
         <h2 className="relative text-blue-600 text-4xl text-center w-fit font-bold">
-          Live Exam{" "}
+          Live Exam {" "}
           <span className="w-3 h-3 top-1/2 -right-8 -translate-y-1/2 mx-2 absolute rounded-full bg-red-500 custom-bounce"></span>
           <span className="w-3 h-3 top-1/2 -right-12 -translate-y-1/2 mx-2 absolute rounded-full bg-red-500 custom-bounce"></span>
           <span className="w-3 h-3 top-1/2 -right-16 -translate-y-1/2 mx-2 absolute rounded-full bg-red-500 custom-bounce"></span>
@@ -77,8 +105,9 @@ function ExamPage() {
             start={true}
             limit={durationToSecond(data?.duration)}
             setFinish={() => {
-              finishExam;
+              finishExam();
             }}
+            examID={id}
           />
         )}
       </div>
@@ -88,11 +117,10 @@ function ExamPage() {
       {questions}
 
       <button
-        onClick={finishExam}
+        onClick = { finishExam }
         className="btn-md btn btn-primary px-16 mt-5"
       >
-        {" "}
-        Finish Exam{" "}
+        {" "} Finish Exam {" "}
       </button>
     </div>
   );

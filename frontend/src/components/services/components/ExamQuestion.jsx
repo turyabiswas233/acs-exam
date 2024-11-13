@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Image({ src, setRemoveImg }) {
   return (
@@ -14,10 +14,10 @@ function Image({ src, setRemoveImg }) {
           src={src}
           width={100}
           alt=""
-          onClick={() => document.getElementById("my_modal_3").showModal()}
+          onClick={() => document.getElementById("image_zoom_dialog").showModal()}
         ></img>
       </div>
-      <dialog id="my_modal_3" className="modal">
+      <dialog id="image_zoom_dialog" className="modal">
         <div className="modal-box">
           <form method="dialog">
             <button className="btn p-2 btn-circle btn-ghost text-black bg-red-600 absolute right-0.5 top-0.5">
@@ -32,13 +32,12 @@ function Image({ src, setRemoveImg }) {
 }
 
 function CqAnswer({ examID, questionID }) {
-  const dummy =
-    "https://media.istockphoto.com/id/1371256107/photo/the-turquoise-wave-water-background-of-summer-beach-at-the-seashore-and-beach-summer-pattern.jpg?s=612x612&w=is&k=20&c=mMF336_bIfYf0DYcH-JmZDJtMOJhAnDrbCqDTq-MbKA=";
+  // const dummy = "https://media.istockphoto.com/id/1371256107/photo/the-turquoise-wave-water-background-of-summer-beach-at-the-seashore-and-beach-summer-pattern.jpg?s=612x612&w=is&k=20&c=mMF336_bIfYf0DYcH-JmZDJtMOJhAnDrbCqDTq-MbKA=";
   const [uploadedImages, setUploadedImages] = useState([]);
   const [isSubmited, setIsSubmited] = useState(false);
 
   // for upload store files, not urls
-  const [formData, setFormDAta] = useState({ examID: "Saikat", forms: [] });
+  const [formData, setFormDAta] = useState({ examID: examID, forms: [] });
 
   const handleFileUppload = (e) => {
     // console.log(e.target.files);
@@ -96,16 +95,32 @@ function CqAnswer({ examID, questionID }) {
   );
 }
 
-function McqAnswer({ examID, questionID, options }) {
+function McqAnswer({ examID, questionID, options, onUpdate }) {
+  console.log("QUESTION ID: " +questionID);
   const [checkedAns, setCheckedAns] = useState([]);
+  const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${examID}_${questionID}`;
+
+  useEffect( ()=>{
+      const answersData = JSON.parse(localStorage.getItem(KEY_MCQ_ANSWERS));
+      if( answersData ){
+        // console.log(answersData.answers);
+        setCheckedAns([...answersData.answers]);
+      }
+  }, [] );
+
+  const markOption = (id)=>{
+    setCheckedAns([...checkedAns, id]);
+    onUpdate([...checkedAns, id]);
+    localStorage.setItem(KEY_MCQ_ANSWERS, JSON.stringify({"answers": [ ...checkedAns, id]}));
+  }
 
   const optionsComp = options.map((option, i) => {
     return (
       <div
         key={i}
         className="flex gap-3 hover:bg-gray-100 p-2"
-        onClick={() => {
-          setCheckedAns([...checkedAns, option.id]);
+        onClick={ ()=> {
+          markOption(option.id);
         }}
       >
         <input
@@ -129,13 +144,14 @@ function ExamQuestion({
   examID = 10, // needed for submit
   questionNumber = 1,
   question,
+  onUpdate
 }) {
+
   return (
     <div className="card bg-amber-50 w-full mt-3 shadow-md">
       <div className="card-body">
         <h2 className="card-title text-black">
-          {" "}
-          {questionNumber}.{" "}
+          {" "} {questionNumber}.{" "}
           <span dangerouslySetInnerHTML={{ __html: question.question }}></span>{" "}
         </h2>
         {question.type == "cq" && (
@@ -146,6 +162,10 @@ function ExamQuestion({
             examID={examID}
             questionID={question.id}
             options={question.options}
+            onUpdate={ (optionsIds)=>{
+                onUpdate(optionsIds)
+              }
+            }
           />
         )}
       </div>
