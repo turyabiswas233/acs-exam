@@ -1,5 +1,7 @@
 const express = require("express");
-const { Exam } = require("../model/exam.model.js");
+const { Exam } = require("../../model/exam.model.js");
+const User = require("../../model/user.model.js");
+const SubmitExam = require("../../model/submitExam.model.js");
 
 const router = express.Router();
 
@@ -53,5 +55,40 @@ router.get("/:_id", async (req, res) => {
     res.status(400).send({ status: false, message: "Failed to get data" });
   }
 });
+// upload|post submition of exam from students
+router.post("/submit", async (req, res) => {
+  const { userId, submitData, examId } = req.body;
+  try {
+    const uid = await User.findOne({ uid: userId }).get("_id");
+    if (!uid) {
+      return res.status(300).send({
+        status: false,
+        message: "You are not a valied student for this exam",
+      });
+    }
+    const examInfo = await Exam.findById({ _id: examId }).populate(
+      "questionsList"
+    );
 
+    if (examInfo) {
+      const submitExam = new SubmitExam({
+        userId,
+        examId,
+        submitData,
+      });
+      console.log(submitExam);
+      submitExam.save();
+      res.send({ status: true, message: "Your data has been submitted" });
+    } else
+      res
+        .status(400)
+        .send({ status: false, message: "Failed to store exam data" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: false,
+      message: "Failed to store exam data. Internal sever error",
+    });
+  }
+});
 module.exports = router;

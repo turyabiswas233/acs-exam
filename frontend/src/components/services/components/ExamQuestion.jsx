@@ -14,7 +14,9 @@ function Image({ src, setRemoveImg }) {
           src={src}
           width={100}
           alt=""
-          onClick={() => document.getElementById("image_zoom_dialog").showModal()}
+          onClick={() =>
+            document.getElementById("image_zoom_dialog").showModal()
+          }
         ></img>
       </div>
       <dialog id="image_zoom_dialog" className="modal">
@@ -95,7 +97,7 @@ function CqAnswer({ examID, questionID }) {
 }
 
 function McqAnswer({ examID, questionID, options, onUpdate }) {
-  console.log("QUESTION ID: " +questionID);
+  // console.log("QUESTION ID: " + questionID);
   const [checkedAns, setCheckedAns] = useState([]);
   const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${examID}_${questionID}`;
 
@@ -124,7 +126,7 @@ function McqAnswer({ examID, questionID, options, onUpdate }) {
       <div
         key={i}
         className="flex gap-3 hover:bg-gray-100 p-2"
-        onClick={ ()=> {
+        onClick={() => {
           markOption(option.id);
         }}
       >
@@ -149,14 +151,14 @@ function ExamQuestion({
   examID = 10, // needed for submit
   questionNumber = 1,
   question,
-  onUpdate
+  onUpdate,
 }) {
-
   return (
     <div className="card bg-amber-50 w-full mt-3 shadow-md">
       <div className="card-body">
         <h2 className="card-title text-black">
-          {" "} {questionNumber}.{" "}
+          {" "}
+          {questionNumber}.{" "}
           <span dangerouslySetInnerHTML={{ __html: question.question }}></span>{" "}
         </h2>
         {question.type == "cq" && (
@@ -167,10 +169,9 @@ function ExamQuestion({
             examID={examID}
             questionID={question.id}
             options={question.options}
-            onUpdate={ (optionsIds)=>{
-                onUpdate(optionsIds)
-              }
-            }
+            onUpdate={(optionsIds) => {
+              onUpdate(optionsIds);
+            }}
           />
         )}
       </div>

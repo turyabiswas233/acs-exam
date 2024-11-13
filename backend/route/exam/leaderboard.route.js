@@ -1,5 +1,5 @@
 const express = require("express");
-const Leaderboard = require("../model/leaderboard.model.js");
+const Leaderboard = require("../../model/leaderboard.model.js");
 
 const router = express.Router();
 router.post("/", async (req, res) => {

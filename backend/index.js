@@ -22,8 +22,8 @@ const adminLeaderboard = require("./route/admin/leaderboard.route.js");
 // Import the exam routes
 const questionRouter = require("./route/questions.route.js");
 const examRouter = require("./route/admin/exam.route.js");
-const publicExamRouter = require("./route/exam.route.js");
-const leaderboardRouter = require("./route/leaderboard.route.js");
+const publicExamRouter = require("./route/exam/exam.route.js");
+const leaderboardRouter = require("./route/exam/leaderboard.route.js");
 const analysis = require("./route/admin/analysis.route.js");
 
 dotenv.config({ path: [".env", ".env.local"] });
@@ -44,9 +44,12 @@ mongoose
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
   message: "Too many requests from this IP, please try again after 15 minutes",
 });
 
+app.use(limiter);
 app.use(
   cors({
     origin: [BASE_URL],
@@ -55,7 +58,6 @@ app.use(
   })
 );
 app.use(express.json({ limit: "20kb" }));
-app.use(limiter);
 
 // API Routes
 app.use("/api/result", resultRoute);
