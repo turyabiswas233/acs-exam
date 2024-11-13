@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import ExamQuestion from "./components/ExamQuestion";
 import Timer from "./components/Timer";
+import { auth } from "../../Config/firebase-config";
+import { useId } from "react";
 
 const API_URL = import.meta.env.APP_URL;
 
@@ -44,6 +46,7 @@ function ExamPage() {
 
   useEffect(() => {
     fetchQuestion();
+    console.log(auth);
   }, []);
 
   const dataloaded = Object.keys(data).length > 0;
@@ -57,7 +60,7 @@ function ExamPage() {
             question={ question }
             questionNumber={i + 1}
             onUpdate = { (optionsIds)=>{
-                console.log(i+1) // question.id is undefined 
+                console.log(question.id) // question.id is undefined 
                 setMcqAnswers( [...mcqAnswers, { questionId: i, options: optionsIds }] );
               }   
             }
@@ -70,25 +73,42 @@ function ExamPage() {
 
   // const questions = [];
 
-  const finishExam = () => {
+  const finishExam = async () => {
     // redirect to after exam screen. For now, i am redirecting to home
+    
     if ( data.questype == "mcq" ){
-        mcqAnswers.forEach( (ans) => {
+        const userId = user?.uid;
+        console.log("USERID: " +userId);
+        const examId = id;
+        const submitData = mcqAnswers.map( (ans)=> {
             const questionId = ans.questionId;
             const optionsIds = ans.options;
+            return {
+              questionId, optionsIds
+            }
+        });
 
-            // api call using id (examid), questionId, optionsId
-            //console.log(ans);
-        })
+        axios.post(API_URL + `api/live-exam/submit`, {
+          withCredentials: true,
+          body: {
+            userId, examId, submitData
+          }
+          
+        }).then( res => {
+          alert("Exam finished");
+          window.location = "/";
+          data.questionsList.forEach( (q) =>{
+            const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
+            localStorage.removeItem(KEY_MCQ_ANSWERS);
+          })
+
+        }).catch(
+          alert("An error occured submitting the exam.")
+        );
+        console.log({userId, examId, submitData});
 
         // clear mcq answers from local storage
-        data.questionsList.forEach( (q) =>{
-          const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
-          localStorage.removeItem(KEY_MCQ_ANSWERS);
-        })
     };
-    alert("Exam finished");
-    // window.location = "/";
   };
 
   return (

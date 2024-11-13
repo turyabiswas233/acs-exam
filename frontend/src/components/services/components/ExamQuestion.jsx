@@ -32,7 +32,6 @@ function Image({ src, setRemoveImg }) {
 }
 
 function CqAnswer({ examID, questionID }) {
-  // const dummy = "https://media.istockphoto.com/id/1371256107/photo/the-turquoise-wave-water-background-of-summer-beach-at-the-seashore-and-beach-summer-pattern.jpg?s=612x612&w=is&k=20&c=mMF336_bIfYf0DYcH-JmZDJtMOJhAnDrbCqDTq-MbKA=";
   const [uploadedImages, setUploadedImages] = useState([]);
   const [isSubmited, setIsSubmited] = useState(false);
 
@@ -103,15 +102,21 @@ function McqAnswer({ examID, questionID, options, onUpdate }) {
   useEffect( ()=>{
       const answersData = JSON.parse(localStorage.getItem(KEY_MCQ_ANSWERS));
       if( answersData ){
-        // console.log(answersData.answers);
+        console.log(answersData.answers);
         setCheckedAns([...answersData.answers]);
       }
   }, [] );
 
   const markOption = (id)=>{
-    setCheckedAns([...checkedAns, id]);
-    onUpdate([...checkedAns, id]);
-    localStorage.setItem(KEY_MCQ_ANSWERS, JSON.stringify({"answers": [ ...checkedAns, id]}));
+    let curAns = checkedAns;
+    if ( checkedAns.includes(id) ){
+      curAns = checkedAns.filter( iterId => iterId !== id );
+    }else{
+      curAns = [...checkedAns, id];
+    }
+    setCheckedAns(curAns);
+    onUpdate(curAns);
+    localStorage.setItem(KEY_MCQ_ANSWERS, JSON.stringify( { "answers" : [ ...checkedAns, id]}));
   }
 
   const optionsComp = options.map((option, i) => {
@@ -137,7 +142,7 @@ function McqAnswer({ examID, questionID, options, onUpdate }) {
     );
   });
 
-  return <>{optionsComp}</>;
+  return <>{ optionsComp }</>;
 }
 
 function ExamQuestion({
