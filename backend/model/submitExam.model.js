@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const submitExamSchema = new Schema({
   userId: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId, // shit :) too minor mistake but etto pain :)
     ref: "Users",
     required: true,
   },

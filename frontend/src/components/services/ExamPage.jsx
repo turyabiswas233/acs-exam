@@ -13,8 +13,8 @@ function ExamPage() {
   const { id } = useParams();
 
   const { user, isAuthenticated } = useAuth();
-  const [ data, setdata ] = useState({});
-  const [ mcqAnswers, setMcqAnswers ] = useState([])
+  const [data, setdata] = useState({});
+  const [mcqAnswers, setMcqAnswers] = useState([]);
 
   const fetchQuestion = async () => {
     try {
@@ -55,15 +55,17 @@ function ExamPage() {
     data.questionsList.map((question, i) => {
       return (
         <ExamQuestion
-            key={i + 1}
-            examID={id}
-            question={ question }
-            questionNumber={i + 1}
-            onUpdate = { (optionsIds)=>{
-                console.log(question.id) // question.id is undefined 
-                setMcqAnswers( [...mcqAnswers, { questionId: i, options: optionsIds }] );
-              }   
-            }
+          key={i + 1}
+          examID={id}
+          question={question}
+          questionNumber={i + 1}
+          onUpdate={(optionsIds) => {
+            console.log(question.id); // question.id is undefined
+            setMcqAnswers([
+              ...mcqAnswers,
+              { questionId: question.id, options: optionsIds },
+            ]);
+          }}
         />
       );
     })
@@ -75,47 +77,66 @@ function ExamPage() {
 
   const finishExam = async () => {
     // redirect to after exam screen. For now, i am redirecting to home
-    
-    if ( data.questype == "mcq" ){
-        const userId = user?.uid;
-        console.log("USERID: " +userId);
-        const examId = id;
-        const submitData = mcqAnswers.map( (ans)=> {
-            const questionId = ans.questionId;
-            const optionsIds = ans.options;
-            return {
-              questionId, optionsIds
-            }
-        });
 
-        axios.post(API_URL + `api/live-exam/submit`, {
-          withCredentials: true,
-          body: {
-            userId, examId, submitData
+    if (data.questype == "mcq") {
+      const userId = user?.uid;
+      console.log("USERID: " + userId);
+      const examId = id;
+      const submitData = mcqAnswers.map((ans) => {
+        const questionId = ans.questionId;
+        const optionsIds = ans.options;
+        return {
+          questionId,
+          optionsIds,
+        };
+      });
+      // no exam kn? exAm to chilo ektu agei tim check koro t
+      axios
+        .post(
+          API_URL + `api/live-exam/submit`,
+          {
+            // eta pray e hoy :)
+            userId: userId,
+            examId: examId,
+            submitData: submitData || [],
+          },
+          {
+            withCredentials: true,
           }
-          
-        }).then( res => {
+        )
+        .then((res) => {
           alert("Exam finished");
-          window.location = "/";
-          data.questionsList.forEach( (q) =>{
+          // window.location = "/";
+          console.log(res);
+          data.questionsList.forEach((q) => {
             const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
             localStorage.removeItem(KEY_MCQ_ANSWERS);
-          })
+          });
+        })
+        .catch((e) => alert("An error occured submitting the exam."));
+      console.log({ userId, examId, submitData });
 
-        }).catch(
-          alert("An error occured submitting the exam.")
-        );
-        console.log({userId, examId, submitData});
-
-        // clear mcq answers from local storage
-    };
+      // clear mcq answers from local storage
+    }
+  };
+  const checkPastExam = async () => {
+    console.log(user);
+    const response = (
+      await axios.get(
+        API_URL + `api/live-exam/checkpastexam/${user?.uid}/${id}`
+      )
+    );
+    console.log(response.data);
   };
 
+  useEffect(() => {
+    checkPastExam();
+  }, []);
   return (
     <div className="flex flex-col items-center bg-white w-full min-h-svh rounded-md p-5">
       <div className="flex justify-between w-full">
         <h2 className="relative text-blue-600 text-4xl text-center w-fit font-bold">
-          Live Exam {" "}
+          Live Exam{" "}
           <span className="w-3 h-3 top-1/2 -right-8 -translate-y-1/2 mx-2 absolute rounded-full bg-red-500 custom-bounce"></span>
           <span className="w-3 h-3 top-1/2 -right-12 -translate-y-1/2 mx-2 absolute rounded-full bg-red-500 custom-bounce"></span>
           <span className="w-3 h-3 top-1/2 -right-16 -translate-y-1/2 mx-2 absolute rounded-full bg-red-500 custom-bounce"></span>
@@ -137,10 +158,11 @@ function ExamPage() {
       {questions}
 
       <button
-        onClick = { finishExam }
+        onClick={finishExam}
         className="btn-md btn btn-primary px-16 mt-5"
       >
-        {" "} Finish Exam {" "}
+        {" "}
+        Finish Exam{" "}
       </button>
     </div>
   );

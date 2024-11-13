@@ -2,6 +2,7 @@ const express = require("express");
 const { Exam } = require("../../model/exam.model.js");
 const User = require("../../model/user.model.js");
 const SubmitExam = require("../../model/submitExam.model.js");
+const { default: mongoose } = require("mongoose");
 
 const router = express.Router();
 
@@ -58,27 +59,28 @@ router.get("/:_id", async (req, res) => {
 // upload|post submition of exam from students
 router.post("/submit", async (req, res) => {
   const { userId, submitData, examId } = req.body;
+  console.log(req.body);
   try {
-    const uid = await User.findOne({ uid: userId }).get("_id");
+    const uid = await User.findOne({ uid: userId });
     if (!uid) {
       return res.status(300).send({
         status: false,
         message: "You are not a valied student for this exam",
       });
     }
-    const examInfo = await Exam.findById({ _id: examId }).populate(
-      "questionsList"
-    );
-
+    const examInfo = await Exam.findById(examId);
+    // console.log(examInfo);
     if (examInfo) {
       const submitExam = new SubmitExam({
-        userId,
+        userId: uid?._id,
         examId,
         submitData,
       });
-      console.log(submitExam);
+      console.log(submitExam); // etao error dilo :)
       submitExam.save();
-      res.send({ status: true, message: "Your data has been submitted" });
+      res
+        .status(200)
+        .send({ status: true, message: "Your data has been submitted" });
     } else
       res
         .status(400)
@@ -88,6 +90,28 @@ router.post("/submit", async (req, res) => {
     res.status(500).send({
       status: false,
       message: "Failed to store exam data. Internal sever error",
+    });
+  }
+});
+
+router.get("/checkpastexam/:uid/:examid", async (req, res) => {
+  const { examid, uid } = req.params;
+  const user = await User.findOne({ uid: uid });
+  const submitData = await SubmitExam.findOne({
+    uiserId: user?._id,
+    examId: examid,
+  });
+
+  if (submitData === null) {
+    res.status(200).send({ allowExam: true, message: "no past record found" });
+  } else {
+    const examInfo = await Exam.findById(examid).populate("questionsList");
+
+    res.status(200).send({
+      allowExam: false,
+      message: "past record found",
+      submitInfo: submitData,
+      examInfo: examInfo,
     });
   }
 });
