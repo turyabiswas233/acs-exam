@@ -77,7 +77,6 @@ function ExamPage() {
 
   const finishExam = async () => {
     // redirect to after exam screen. For now, i am redirecting to home
-
     if (data.questype == "mcq") {
       const userId = user?.uid;
       console.log("USERID: " + userId);
@@ -119,6 +118,7 @@ function ExamPage() {
       // clear mcq answers from local storage
     }
   };
+
   const checkPastExam = async () => {
     console.log(user);
     const response = (
@@ -145,9 +145,7 @@ function ExamPage() {
           <Timer
             start={true}
             limit={durationToSecond(data?.duration)}
-            setFinish={() => {
-              finishExam();
-            }}
+            setFinish={ finishExam }
             examID={id}
           />
         )}

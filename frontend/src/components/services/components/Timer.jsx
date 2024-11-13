@@ -4,33 +4,53 @@ const Timer = ({ start, limit, setFinish, examID }) => {
   const [seconds, setSeconds] = useState(limit);
   const [isRunning, setIsRunning] = useState(false);
 
-  const KEY_EXAM_TIME_LEFT = `EXAM_TIME_LEFT_${examID}`;
+  const KEY_EXAM_STARTED_TIME = `KEY_EXAM_STARTED_TIME_${examID}`;
 
   useEffect(() => {
     let interval;
     if (isRunning) {
       interval = setInterval(() => {
-        setSeconds((prevSeconds) => prevSeconds - 1);
-        localStorage.setItem(KEY_EXAM_TIME_LEFT, seconds-1); // setting value
-      }, 1000);
+          if ( seconds >= 1 ){
+            setSeconds((prevSeconds) => prevSeconds - 1 );
+          }else{
+            if (seconds === 0) { setFinish() };
+            clearInterval(interval);
+          }
+        }, 1000);
+        // localStorage.setItem(KEY_EXAM_STARTED_TIME, seconds-1); // setting value
     }
-    if (seconds <= 0) {
-      setFinish();
-      handleStop();
-      setSeconds(0);
-      localStorage.removeItem(KEY_EXAM_TIME_LEFT);
-    }
+    //console.log(seconds)
+    // if (seconds === 0) {
+    //   setFinish();
+      // handleStop();
+      // setSeconds(0);
+      // localStorage.removeItem(KEY_EXAM_TIME_LEFT);
+    // }
     return () => clearInterval(interval);
   }, [isRunning, seconds, start]);
 
   useEffect(() => {
     if (start) setIsRunning(true);
     // try to retrive saved value of time
-    const seconds = localStorage.getItem(KEY_EXAM_TIME_LEFT);
+    const localStartTime = localStorage.getItem(KEY_EXAM_STARTED_TIME);
 
-    if ( seconds ){
-      setSeconds(parseInt(seconds));
+    if( localStartTime ){
+      const started = parseInt(localStartTime);
+      const now = new Date().getTime();
+      const diff = parseInt( (now - started)/1000 );
+      if (diff <= seconds ){
+          setSeconds(seconds - diff);
+      }else{
+        setSeconds(0);
+      }
+    }else{
+      const started = new Date().getTime();
+      localStorage.setItem(KEY_EXAM_STARTED_TIME, started);
     }
+
+    // if ( seconds ){
+    //   setSeconds(parseInt(seconds));
+    // }
   }, [start]);
 
   const handleStop = () => setIsRunning(false);
@@ -48,7 +68,7 @@ const Timer = ({ start, limit, setFinish, examID }) => {
     <div className="fixed top-45 right-6 z-20">
       <div className="bg-swhite text-sred font-semibold underline underline-offset-2 px-4 py-2 rounded-md my-1 flex justify-center text-xl">
         {/* Time remaining: */}
-        {formattedTime()} 
+        { formattedTime() } 
       </div>
       
     </div>
