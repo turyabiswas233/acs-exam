@@ -39,8 +39,8 @@ function AccountPage() {
   const [toggle, setPage] = useState(ACCOUNT_CONFIG.SIGNIN);
   const [user] = useContext(AuthContext);
   useEffect(() => {
-    if (user && toggle !== ACCOUNT_CONFIG.SIGNIN)
-      setPage(ACCOUNT_CONFIG.SIGNIN);
+    // if (user && toggle !== ACCOUNT_CONFIG.SIGNIN)
+    //   setPage(ACCOUNT_CONFIG.SIGNIN);
   }, [user, toggle]);
 
   return (

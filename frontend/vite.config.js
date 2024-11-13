@@ -6,10 +6,13 @@ export default defineConfig({
   plugins: [react()],
   envPrefix: "APP",
   build: {
-    chunkSizeWarningLimit: 1600, // Adjust the limit as needed
-  },
-  server: {
-    // host: ["10.0.0.151"],
+    cssMinify: true,
+    minify: "esbuild",
+    chunkSizeWarningLimit: 4000,
+    commonjsOptions: {
+      transformMixedEsModules: true,
+      strictRequires: true,
+    },
+    
   },
 });
-process.on("warning", (e) => console.warn(e));

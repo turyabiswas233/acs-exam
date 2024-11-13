@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useReducer } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import Input from "../../Input";
 import axios from "axios";
@@ -179,14 +179,21 @@ const ExamInfo = () => {
             </div>
           </form>
         </div>
-
-        <button
-          className="btn bg-gray-600 text-white"
-          type="button"
-          onClick={handleToggle}
-        >
-          Edit
-        </button>
+        <div className="grid">
+          <button
+            className="btn bg-gray-600 text-white"
+            type="button"
+            onClick={handleToggle}
+          >
+            Edit
+          </button>
+          <Link
+            className="btn bg-blue-600 hover:bg-blue-500 text-white"
+            to={`/swift-admin/a_dashboard/exam/view/${examid}`}
+          >
+            View Questions
+          </Link>
+        </div>
       </div>
       <hr />
     </div>

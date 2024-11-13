@@ -14,6 +14,7 @@ import {
   MdFace,
   MdPhone,
   MdSettings,
+  MdVerified,
 } from "react-icons/md";
 import { fetchAdminInfo } from "../../hooks/adminHook";
 
@@ -139,8 +140,20 @@ function Signin() {
         </form>
       ) : (
         <div className="bg-white rounded-2xl shadow-lg text-black space-y-3 mt-8 p-10 grid text-sm md:text-base mx-auto">
+          <div>
+            <button
+              type="button"
+              className="text-red-50 bg-red-500 rounded-md px-5 py-1 float-right"
+              onClick={() => {
+                window.localStorage.clear();
+                window.location.reload();
+              }}
+            >
+              Refresh
+            </button>
+          </div>
           <div className="grid sm:inline-flex items-center gap-2 text-slate-400 hover:bg-slate-100 p-2 rounded-md">
-            <MdFace className="text-blue-400" />
+            <MdFace className="text-blue-500" />
             {data?.displayName ? (
               data?.displayName
             ) : (
@@ -175,7 +188,10 @@ function Signin() {
             )}
           </div>
           <div className="grid sm:inline-flex items-center gap-2 text-slate-400 hover:bg-slate-100 p-2 rounded-md">
-            <MdEmail className="text-blue-400" />
+            <div className="flex">
+              <MdEmail className="text-blue-500" />
+              <MdVerified className="text-green-500" />
+            </div>
             {data?.email}
             {!user?.emailVerified ? (
               <button
@@ -199,11 +215,11 @@ function Signin() {
             ) : null}
           </div>
           <div className="grid sm:inline-flex items-center gap-2 text-slate-400 hover:bg-slate-100 p-2 rounded-md">
-            <MdPhone className="text-blue-400" />
+            <MdPhone className="text-blue-500" />
             {data?.phone}
           </div>
           <div className="grid sm:inline-flex items-center gap-2 text-slate-400 hover:bg-slate-100 p-2 rounded-md">
-            <MdSettings className="text-blue-400" />
+            <MdSettings className="text-blue-500" />
             {data?.role === "sudo-admin"
               ? "Admin"
               : data?.role === "teacher"
@@ -211,8 +227,13 @@ function Signin() {
               : "not-set"}
           </div>
           <div className="grid sm:inline-flex items-center gap-2 text-slate-400 p-2 rounded-md">
-            <MdAccessibility className="text-blue-400" />
+            <MdAccessibility className="text-blue-500" />
             Permission: {data?.permission ? "Granted" : "Denied"}
+            {!data?.permission && (
+              <p className="text-red-500 text-xs">
+                *Admin will soon grant you permission.
+              </p>
+            )}
           </div>
         </div>
       )}

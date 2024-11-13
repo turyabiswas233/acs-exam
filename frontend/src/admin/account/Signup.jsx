@@ -51,7 +51,7 @@ function Signup() {
                 if (us.displayName)
                   await axios
                     .post(
-                      `${DB_URL}/admin/auth/singup`,
+                      `${DB_URL}sadmin/auth/signup`,
                       {
                         uid: us?.uid,
                         email: us?.email,
@@ -239,6 +239,8 @@ function Signup() {
           </div>
           <div className="inline-flex items-center gap-2 text-slate-400 ring p-2 rounded-md">
             <MdEmail className="text-blue-400" />
+            <MdVerified className="text-blue-400" />
+
             {user?.email}
             {user?.emailVerified ? 1 : 0}
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MdCheckCircle } from "react-icons/md";
 import { LuLoader } from "react-icons/lu";
 import axios from "axios";
@@ -10,22 +10,22 @@ function ViewExam() {
   const [data, setData] = useState(null);
   const [queryList, setQueryList] = useState([]);
   const [load, setLoad] = useState(false);
-  useEffect(() => {
-    async function getData() {
-      try {
-        setLoad(true);
+  async function getData() {
+    try {
+      setLoad(true);
 
-        const response = await axios.get(`${url}sadmin/exam/${examid}`);
-        console.log("response.data");
-        if (response.data.status === "success") setData(response.data.data);
-        else alert("Failed to load data");
-      } catch (error) {
-        alert("Failed to load data");
-      } finally {
-        setLoad(false);
-      }
+      const response = await axios.get(`${url}sadmin/exam/${examid}`);
+      console.log(response.data);
+      if (response.data.status === "success") setData(response.data.data);
+      else alert("Failed to load data");
+    } catch (error) {
+      alert("Failed to load data");
+    } finally {
+      setLoad(false);
     }
-    return () => getData();
+  }
+  useEffect(() => {
+    getData();
   }, [examid]);
 
   return (
@@ -62,6 +62,7 @@ const ExamHeader = ({
 }) => {
   const startTime = new Date(data?.starttime);
   const endtime = new Date(data?.endtime);
+  const { examid } = useParams();
   return (
     <div className="font-thin">
       <p>{data?.examname}</p>
@@ -71,6 +72,12 @@ const ExamHeader = ({
       <p>
         Duration: {data?.duration?.hh}h : {data?.duration?.mm}m
       </p>
+      <Link
+        className="btn mt-5 bg-green-600 hover:bg-green-500 text-white"
+        to={`/swift-admin/a_dashboard/exam/add_q/${examid}`}
+      >
+        Add Questions
+      </Link>
     </div>
   );
 };
@@ -80,14 +87,17 @@ const ExamBody = ({ queryList = [] }) => {
       <div key={q?._id} className="my-10">
         <section className="flex items-start gap-2">
           <span>{qid + 1}. </span>
-          <h2 className="text-xl" dangerouslySetInnerHTML={{ __html: q?.question }}></h2>
+          <h2
+            className="text-xl"
+            dangerouslySetInnerHTML={{ __html: q?.question }}
+          ></h2>
         </section>
 
         <ul className="grid gap-2 my-4">
           {q?.options?.map((op) => (
             <li
-              className={`flex items-center font-medium justify-between gap-2 ${
-                op?.isCorrect ? "bg-green-100" : "bg-slate-100"
+              className={`flex items-center font-medium justify-between gap-2 ring-1 ${
+                op?.isCorrect ? "bg-green-100 ring-green-300" : "bg-slate-100 ring-slate-300"
               } p-2 rounded-md`}
               key={`${q?._id}--${op?.id}`}
             >
@@ -100,6 +110,14 @@ const ExamBody = ({ queryList = [] }) => {
               ) : null}
             </li>
           ))}
+          <li>
+            Solve:{" "}
+            {q?.solve ? (
+              <div className="bg-slate-50 ring-1 ring-slate-300 rounded-md px-4 py-2 text-slate-900" dangerouslySetInnerHTML={{ __html: q?.solve }}></div>
+            ) : (
+              "--"
+            )}
+          </li>
         </ul>
       </div>
     );

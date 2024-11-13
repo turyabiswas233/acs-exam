@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
 });
 // only show exam details
 router.get("/:_id", async (req, res) => {
-  const { _id } = req.params; 
+  const { _id } = req.params;
   try {
     const examInfo = await Exam.findById(_id).populate("questionsList");
     if (examInfo) {
@@ -34,6 +34,7 @@ router.get("/:_id", async (req, res) => {
         totalQuestion: examInfo.questionsList?.length,
         questionsList: examInfo.questionsList.map((e) => {
           return {
+            id: e?._id,
             question: e.question,
             type: e.questype,
             options: e.options.map((op) => {

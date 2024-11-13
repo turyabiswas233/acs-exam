@@ -43,7 +43,7 @@ mongoose
 // Define the rate limit rule
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 50, // Limit each IP to 100 requests per windowMs
+  max: 100, // Limit each IP to 100 requests per windowMs
   message: "Too many requests from this IP, please try again after 15 minutes",
 });
 
@@ -70,7 +70,7 @@ app.use("/api/live-exam", publicExamRouter);
 
 //admin request
 app.use("/sadmin/adminRole", adminRole);
-app.use("/sadmin/auth/singup", adminAuth);
+app.use("/sadmin/auth/signup", adminAuth);
 app.use("/sadmin/auth/signin", adminInfo);
 app.use("/sadmin/sudo", adminUsersRoute);
 app.use("/sadmin/leaderboard", adminLeaderboard);
