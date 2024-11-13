@@ -19,6 +19,7 @@ const fetchAdminInfo = (jwt) => {
           const response = await axios.get(
             `${DB_URL}sadmin/auth/signin?tokenId=${jwt}`
           );
+          console.log(response.data);
           if (response.data?.user) {
             setData(response.data?.user);
             localStorage.setItem(
@@ -27,6 +28,9 @@ const fetchAdminInfo = (jwt) => {
             );
             console.log("from server");
           }
+          if (response.data?.message === "no user" || !response.data?.user)
+            seterror("No User found as Admin for this account");
+          if (!response.data?.user) setData(null);
         } catch (err) {
           console.log(err);
           seterror(err?.message);

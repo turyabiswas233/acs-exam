@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
 import Input from "../Input";
 import { AuthContext } from "../../context/AuthContext";
 import { auth } from "../../Config/firebase-config";
@@ -138,6 +137,10 @@ function Signin() {
             to student
           </p>
         </form>
+      ) : !data ? (
+        <p className="text-red-500 text-xl font-bold">
+          {error || "An error occurred"}
+        </p>
       ) : (
         <div className="bg-white rounded-2xl shadow-lg text-black space-y-3 mt-8 p-10 grid text-sm md:text-base mx-auto">
           <div>

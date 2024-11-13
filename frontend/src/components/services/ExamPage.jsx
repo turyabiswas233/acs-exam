@@ -78,14 +78,14 @@ function ExamPage() {
             const optionsIds = ans.options;
 
             // api call using id (examid), questionId, optionsId
-            //console.log(ans);
+            console.log(ans);
         })
 
         // clear mcq answers from local storage
-        data.questionsList.forEach( (q) =>{
-          const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
-          localStorage.removeItem(KEY_MCQ_ANSWERS);
-        })
+        // data.questionsList.forEach( (q) =>{
+        //   const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
+        //   localStorage.removeItem(KEY_MCQ_ANSWERS);
+        // })
     };
     alert("Exam finished");
     // window.location = "/";
