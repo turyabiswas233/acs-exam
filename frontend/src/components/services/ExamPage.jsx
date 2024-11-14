@@ -26,7 +26,7 @@ function ExamPage() {
   const [ currentScreen, setCurrentScreen ] = useState(CONST_EXAM_PAGE_LOADING);
 
   const checkPastExam = async () => {
-    console.log(user);
+    // console.log(user);
     const response = (
       await axios.get(
         API_URL + `api/live-exam/checkpastexam/${user?.uid}/${id}`
@@ -39,7 +39,7 @@ function ExamPage() {
         setCurrentScreen(CONST_EXAM_REVIEW);
       }
     }
-    console.log("Prev sub", response.data);
+    // console.log("Prev sub", response.data);
   };
 
   useEffect(() => {
@@ -195,7 +195,7 @@ function ExamPage() {
       }} />
     }
 
-    { currentScreen === CONST_EXAM_REVIEW && <ExamReview /> }
+    { currentScreen === CONST_EXAM_REVIEW && <ExamReview id={ id } /> }
 
     { 
       currentScreen === CONST_EXAM_PAGE_LOADING

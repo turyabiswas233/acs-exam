@@ -11,8 +11,8 @@ const API_URL = import.meta.env.APP_URL;
 
 function TakeExam({ id, onFinishDemand }){
     const { user, isAuthenticated } = useAuth();
-    const [data, setdata] = useState({});
-    const [mcqAnswers, setMcqAnswers] = useState([]);
+    const [ data, setdata] = useState({});
+    const [ mcqAnswers, setMcqAnswers] = useState([]);
 
     const fetchQuestion = async () => {
         try {
@@ -26,7 +26,6 @@ function TakeExam({ id, onFinishDemand }){
             .then((res) => {
               if (res.data.status === true) {
                 setdata(res.data?.data);
-                console.log(res.data?.data);
               } else {
                 alert("No exam found");
                 setdata(null);
@@ -44,6 +43,7 @@ function TakeExam({ id, onFinishDemand }){
     
       useEffect(() => {
         fetchQuestion();
+        console.log(data)
         console.log(auth);
       }, []);
     
@@ -58,7 +58,7 @@ function TakeExam({ id, onFinishDemand }){
               question={question}
               questionNumber={i + 1}
               onUpdate={(optionsIds) => {
-                console.log(question.id);
+                console.log(optionsIds);
                 setMcqAnswers([
                   ...mcqAnswers,
                   { questionId: question.id, options: optionsIds },
@@ -73,30 +73,44 @@ function TakeExam({ id, onFinishDemand }){
 
     
       const finishExam = async () => {
-        // redirect to after exam screen. For now, i am redirecting to home
+        
         console.log(data);
+
         if ( data.questype === "cq"){
             // answered were store in indivildual questions submission
             onFinishDemand();
         }
+
         if (data.questype == "mcq") {
           const userId = user?.uid;
-          console.log("USERID: " + userId);
+          // console.log("USERID: " + userId);
+          const startTime = Date.parse(data.starttime);
+          const endTime = Date.parse(data.endtime);
+          const timeNow = Date.now();
+          const isLiveExam = startTime <= timeNow < endTime;
+
+          console.log();
+
           const examId = id;
           const submitData = mcqAnswers.map((ans) => {
             const questionId = ans.questionId;
             const optionsIds = ans.options;
+
             return {
               questionId,
               optionsIds,
             };
           });
+
+          console.log(submitData);
+          /*
           axios
             .post(
               API_URL + `api/live-exam/submit`,
               {
                 userId: userId,
                 examId: examId,
+                isLiveExam: isLiveExam,
                 submitData: submitData || [],
               },
               {
@@ -117,7 +131,7 @@ function TakeExam({ id, onFinishDemand }){
             })
             .catch((e) => alert("An error occured submitting the exam."));
           console.log({ userId, examId, submitData });
-    
+        */
           // clear mcq answers from local storage
         }
       };

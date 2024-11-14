@@ -104,8 +104,9 @@ function McqAnswer({ examID, questionID, options, onUpdate }) {
   useEffect( ()=>{
       const answersData = JSON.parse(localStorage.getItem(KEY_MCQ_ANSWERS));
       if( answersData ){
-        console.log(answersData.answers);
+        // console.log(answersData.answers);
         setCheckedAns([...answersData.answers]);
+        onUpdate([...answersData.answers]);
       }
   }, [] );
 
@@ -127,6 +128,7 @@ function McqAnswer({ examID, questionID, options, onUpdate }) {
         key={i}
         className="flex gap-3 hover:bg-gray-100 p-2"
         onClick={() => {
+          console.log("ABC: ", option.id);
           markOption(option.id);
         }}
       >
