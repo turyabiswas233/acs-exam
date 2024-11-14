@@ -98,4 +98,5 @@ app.listen(PORT, (err) => {
   } else {
     console.log(`Server is running on http://localhost:${PORT}`);
   }
+  console.log(BASE_URL)
 });
