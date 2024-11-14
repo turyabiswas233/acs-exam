@@ -65,7 +65,7 @@ const Timer = ({ start, limit, setFinish, examID }) => {
   };
 
   return (
-    <div className="fixed top-45 right-6 z-20">
+    <div className="fixed top-45 right-6 shadow-xl rounded-lg z-20">
       <div className="bg-swhite text-sred font-semibold underline underline-offset-2 px-4 py-2 rounded-md my-1 flex justify-center text-xl">
         {/* Time remaining: */}
         { formattedTime() } 
