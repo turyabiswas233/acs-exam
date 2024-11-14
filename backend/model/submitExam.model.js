@@ -7,6 +7,11 @@ const submitExamSchema = new Schema({
     ref: "Users",
     required: true,
   },
+  isLiveExam: {
+    type: Schema.Types.Boolean,
+    required: true,
+    default: false,
+  },
   examId: {
     type: Schema.Types.ObjectId,
     ref: "Exams",
@@ -14,7 +19,7 @@ const submitExamSchema = new Schema({
   },
   submitData: {
     type: Array,
-    required: true,
+    required: true, 
   },
 });
 

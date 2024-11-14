@@ -58,6 +58,7 @@ function Signup() {
                         displayName: adminInfo.f_name,
                         role: role,
                         phone: adminInfo.phone,
+                        isVerified: us?.emailVerified,
                       },
                       {
                         headers: {

@@ -79,9 +79,16 @@ function AdminExamList() {
 const ExamCard = ({ exam, list, setData }) => {
   const starttime = new Date(exam?.starttime);
   const endtime = new Date(exam?.endtime);
+  const curTime = new Date().getTime();
   return (
-    <p className="px-4 my-2 rounded-md hover:bg-blue-50 hover:text-slate-900 transition-colors duration-100 ease-out font-thin text-xs grid grid-cols-6 text-center items-center">
-      <span className="font-bold px-2">{exam?.examname}</span>
+    <p className="px-4 my-2 rounded-md hover:bg-blue-50 hover:text-slate-900 transition-colors duration-100 ease-out font-thin text-sm grid grid-cols-6 text-center items-center">
+      <span className="font-bold px-2">
+        {exam?.examname} 
+        <span className="animate-pulse text-red-500 text-xs">
+
+        {curTime > starttime.getTime() && curTime < endtime.getTime() ? " live" : ""}
+        </span>
+      </span>
       <span className="px-2">
         <span>{exam?.examclass}</span>
         <span>{exam?.questype}</span>

@@ -201,16 +201,15 @@ function Signin() {
                 className="text-sm btn border-0 bg-green-500 hover:bg-green-700 text-white"
                 type="button"
                 onClick={() => {
-                  const url = window.location.origin;
-                  console.log(user);
+                  const url = window.location.origin; 
                   // return;
                   sendEmailVerification(user, {
-                    url: `${url}/swift-admin/account`,
+                    url: `${url}/swift-admin/account/verified`,
                   })
                     .then(() => {
                       alert("An email has been sent to " + user?.email);
                     })
-                    .catch((err) => console.log("error"));
+                    .catch((err) => console.warn("error",err));
                 }}
               >
                 Verify

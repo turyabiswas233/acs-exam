@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   let exam;
   try {
-    exam = await Exam.find();
+    exam = await Exam.find().sort({ starttime: -1 });
 
     res.status(200).json({
       status: true,
@@ -56,9 +56,35 @@ router.get("/:_id", async (req, res) => {
     res.status(400).send({ status: false, message: "Failed to get data" });
   }
 });
+// only show exam details
+router.get("/exam/:uid", async (req, res) => {
+  const { uid } = req.params;
+  try {
+    const user = await User.findOne({ uid: uid });
+    const examInfo = await SubmitExam.find({
+      userId: user?._id,
+    });
+
+    const data = await Promise.all(
+      examInfo?.map(async (e) => {
+        return {
+          exam: await Exam.findById(e?.examId)?.populate("questionsList"),
+          submitInfo: e.submitData,
+        };
+      })
+    );
+
+    if (examInfo) {
+      res.send({ status: true, data: data });
+    } else res.send({ status: false, data: null });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ status: false, message: "Failed to get data" });
+  }
+});
 // upload|post submition of exam from students
 router.post("/submit", async (req, res) => {
-  const { userId, submitData, examId } = req.body;
+  const { userId, submitData, examId, isLiveExam } = req.body;
   console.log(req.body);
   try {
     const uid = await User.findOne({ uid: userId });
@@ -75,8 +101,10 @@ router.post("/submit", async (req, res) => {
         userId: uid?._id,
         examId,
         submitData,
+        isLiveExam,
+        submitTime: new Date().toISOString(),
       });
-      console.log(submitExam); // etao error dilo :)
+      console.log(submitExam);
       submitExam.save();
       res
         .status(200)

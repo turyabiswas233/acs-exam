@@ -101,5 +101,21 @@ const fetchAdminStudents = (limit, page, p, jwt) => {
   }, [page, p]);
   return { list, size, error, p };
 };
-
-export { fetchAdminInfo, fetchAdminUsers, fetchAdminStudents };
+const updateAdminUser = async (id, isVerified) => {
+  try {
+    const response = await axios.patch(
+      `${DB_URL}sadmin/sudo/verify/${id}`,
+      {
+        isVerified: isVerified,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};
+export { fetchAdminInfo, fetchAdminUsers, fetchAdminStudents, updateAdminUser };

@@ -101,6 +101,7 @@ function AllTeachers() {
                 <td>Phone</td>
                 <td>Role</td>
                 <td>Permission</td>
+                <td>Verified Email</td>
               </tr>
             </thead>
             <tbody>
@@ -136,6 +137,8 @@ function AllTeachers() {
                           />
                         )}
                       </td>
+                      <td className={` ${usr?.isVerified ? "text-green-500" : 'text-red-500'}`}>{usr?.isVerified ? "Yes": 'No'}</td>
+
                     </tr>
                   );
                 })}

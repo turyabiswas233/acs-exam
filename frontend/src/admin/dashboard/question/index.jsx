@@ -203,7 +203,7 @@ const ExamInfo = () => {
 function AdminQuestion() {
   const [questionInfo, setQuestion] = useState({
     qt: "",
-    questype: "",
+    questype: "mcq",
     options: [
       {
         id: 0,

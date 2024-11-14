@@ -33,6 +33,7 @@ import AdminExamList from "./admin/dashboard/exam/List.jsx";
 import AdminQuestion from "./admin/dashboard/question/index.jsx";
 import AdminLeaderboard from "./admin/dashboard/Leaderboard.jsx";
 import ViewExam from "./admin/dashboard/exam/ViewExam.jsx";
+import Verified from "./admin/account/Verified.jsx";
 
 const routerConfig = createBrowserRouter([
   {
@@ -111,6 +112,10 @@ const routerConfig = createBrowserRouter([
       {
         path: "account",
         element: <AccountPage />,
+      },
+      {
+        path: "account/verified/:userId",
+        element: <Verified />,
       },
       {
         path: "aa_dash",

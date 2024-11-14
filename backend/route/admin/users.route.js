@@ -78,5 +78,24 @@ adminUsersRoute.patch("/users/:id", async (req, res) => {
       .json({ success: false, message: "Error 500: To change permission" });
   }
 });
+adminUsersRoute.patch("/verify/:id", async (req, res) => {
+  try {
+    const { isVerified } = req.body;
+    const _id = req.params.id;
+    const adminUser = await AdminUser.findByIdAndUpdate(_id, {
+      $set: { isVerified: isVerified },
+    });
+    if (adminUser)
+      res
+        .status(200)
+        .json({ success: true, message: "Update Successful", _id: _id });
+    else res.status(404).json({ success: false, message: "Update Failed" });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(404)
+      .json({ success: false, message: "Error 500: To change permission" });
+  }
+});
 
 module.exports = adminUsersRoute;

@@ -7,6 +7,7 @@ const adminUserSchema = new mongoose.Schema({
   role: { type: String, enum: ["sudo-admin", "teacher"], required: true },
   phone: { type: String, required: true },
   permission: { type: Boolean },
+  isVerified: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 

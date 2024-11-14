@@ -35,7 +35,7 @@ const BASE_URL = process.env.BASE_URL.split(",");
 // Connect to MongoDB
 mongoose
   .connect(URI)
-  .then(() => console.log("Connected to MongoDB", URI))
+  .then(() => console.log("Connected to MongoDB server"))
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error);
     process.exit(1);
@@ -80,15 +80,15 @@ app.use("/sadmin/exam", examRouter);
 app.use("/analysis", analysis);
 
 //never touch it
-if (process.env.NODE_ENV == "production") {
-  app.use(express.static("./output"));
-  app.get("/*", async (req, res) => {
-    res.sendFile(path.resolve("output", "index.html"));
-  });
-}
+// if (process.env.NODE_ENV == "production") {
+//   app.use(express.static("./output"));
+//   app.get("/*", async (req, res) => {
+//     res.sendFile(path.resolve("output", "index.html"));
+//   });
+// }
 
 app.get("/", async (req, res) => {
-  res.send("working well" + BASE_URL.toString());
+  res.send("working well"+ process.env.NODE_ENV);
 });
 
 // Start the server
@@ -97,6 +97,5 @@ app.listen(PORT, (err) => {
     console.error("Failed to start server:", err);
   } else {
     console.log(`Server is running on http://localhost:${PORT}`);
-    console.log(process.env.NODE_ENV);
   }
 });

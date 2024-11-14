@@ -9,7 +9,7 @@ function App() {
         <Banner />
         <StaticData />
       </div>
-      <Transaction />
+      {/* <Transaction /> */}
     </div>
   );
 }

@@ -239,7 +239,7 @@ function UserProfile() {
                   ) : null}
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-2 md:justify-between">
+                <div className="flex-col md:flex-row gap-2 md:justify-between hidden">
                   <HSCInfo
                     info={data?.hsc || { roll: "", board: "", reg: "" }}
                   />
@@ -270,7 +270,7 @@ function UserProfile() {
               }`}
             >
               <form
-                className="mx-auto relative w-full bg-slate-900 px-5 py-10 rounded-2xl text-blue-100"
+                className="mx-auto relative w-full bg-slate-100 px-5 py-10 rounded-2xl text-sblack ring-1 ring-sblack"
                 onSubmit={updateProfileInfo}
               >
                 {toast == "profile" && (
@@ -284,8 +284,13 @@ function UserProfile() {
                 )}
                 <h1 className="text-lg font-semibold">Update Information</h1>
 
-                <section className="p-5 rounded-lg space-y-3 bg-slate-800/60 my-4 ring-2 ring-slate-200/20 text-white w-full grid gap-1">
-                  <label htmlFor="Name">Your Name</label>
+                <section className="p-5 rounded-lg space-y-3 bg-slate-200 my-4 ring-2 ring-slate-200/20 w-full grid gap-1">
+                  <label htmlFor="Name">
+                    Your Name{" "}
+                    <span className="text-red-500 text-sm font-semibold">
+                      *as certificate honours certificate
+                    </span>
+                  </label>
                   <input
                     className="p-2 w-full text-base bg-transparent ring-2 ring-blue-500 border-none outline-none rounded-md "
                     type="text"
@@ -298,7 +303,7 @@ function UserProfile() {
                     }}
                   />
                 </section>
-                <section className="p-5 rounded-lg space-y-3 bg-slate-800/60 my-4 ring-2 ring-slate-200/20 w-full grid  gap-1">
+                <section className="p-5 rounded-lg space-y-3 bg-slate-200 my-4 ring-2 ring-slate-200/20 w-full grid  gap-1">
                   <label htmlFor="email">Your Email</label>
                   <input
                     className="p-2 w-full text-base bg-transparent ring-2 ring-blue-500 border-none outline-none rounded-md  disabled:ring-gray-400 disabled:opacity-60 cursor-not-allowed  "
@@ -313,8 +318,8 @@ function UserProfile() {
                     id="email"
                   />
                 </section>
-                <section className="p-5 rounded-lg space-y-3 bg-slate-800/60 my-4 ring-2 ring-slate-200/20 w-full grid  gap-1">
-                  <label htmlFor="phone">Your Phone</label>
+                <section className="p-5 rounded-lg space-y-3 bg-slate-200 my-4 ring-2 ring-slate-200/20 w-full grid  gap-1">
+                  <label htmlFor="phone">Registered Phone Number</label>
                   <input
                     className="p-2 w-full text-base bg-transparent ring-2 ring-blue-500 border-none outline-none rounded-md "
                     type="tel"
@@ -334,7 +339,7 @@ function UserProfile() {
                 />
               </form>
               <form
-                className={`relative mx-auto w-full bg-slate-900 px-5 py-10 rounded-xl text-blue-100 ${
+                className={`hidden relative mx-auto w-full bg-slate-900 px-5 py-10 rounded-xl text-blue-100 ${
                   auth.currentUser.providerData[0].providerId ===
                     "google.com" &&
                   " aria-disabled:bg-opacity-70 aria-disabled:cursor-not-allowed aria-disabled:pointer-events-none"
@@ -423,8 +428,10 @@ function UserProfile() {
                   change password
                 </button>
               </form>
-              <SSCForm brd={board} data={data} />
-              <HSCForm brd={board} data={data} />
+              <div className="hidden">
+                <SSCForm brd={board} data={data} />
+                <HSCForm brd={board} data={data} />
+              </div>
             </div>
           </>
         )}
