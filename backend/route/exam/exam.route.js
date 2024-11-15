@@ -97,18 +97,30 @@ router.post("/submit", async (req, res) => {
     const examInfo = await Exam.findById(examId);
     // console.log(examInfo);
     if (examInfo) {
-      const submitExam = new SubmitExam({
+      const findOld = await SubmitExam.findOne({
         userId: uid?._id,
-        examId,
-        submitData,
-        isLiveExam,
-        submitTime: new Date().toISOString(),
+        examId: examId,
       });
-      console.log(submitExam);
-      submitExam.save();
-      res
-        .status(200)
-        .send({ status: true, message: "Your data has been submitted" });
+      if (findOld) {
+        res.status(203).send({
+          success: true,
+          message: "You have already submitted this exam",
+        });
+        return;
+      } else {
+        const submitExam = new SubmitExam({
+          userId: uid?._id,
+          examId,
+          submitData,
+          isLiveExam,
+          submitTime: new Date().toISOString(),
+        });
+        console.log(submitExam);
+        submitExam.save();
+        res
+          .status(200)
+          .send({ status: true, message: "Your data has been submitted" });
+      }
     } else
       res
         .status(400)

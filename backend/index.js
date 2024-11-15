@@ -42,19 +42,18 @@ mongoose
   });
 // Define the rate limit rule
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 500, // Limit each IP to 100 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
-  message: "Too many requests from this IP, please try again after 15 minutes",
+  message: "Too many requests from this IP, please try again after 5 minutes",
 });
 
 app.use(limiter);
 app.use(
   cors({
-    origin: [BASE_URL],
+    origin: [...BASE_URL],
     methods: ["POST", "GET", "PATCH", "PUT", "DELETE"],
-    credentials: true,
   })
 );
 app.use(express.json({ limit: "20kb" }));
@@ -88,7 +87,9 @@ app.use("/analysis", analysis);
 // }
 
 app.get("/", async (req, res) => {
-  res.send("working well"+ process.env.NODE_ENV);
+  res
+    .status(200)
+    .send({ data: "server connected and working well, baseurl-length:" + BASE_URL.length });
 });
 
 // Start the server
@@ -98,5 +99,5 @@ app.listen(PORT, (err) => {
   } else {
     console.log(`Server is running on http://localhost:${PORT}`);
   }
-  console.log(BASE_URL)
+  console.log(BASE_URL);
 });
