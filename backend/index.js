@@ -54,6 +54,7 @@ app.use(
   cors({
     origin: [...BASE_URL],
     methods: ["POST", "GET", "PATCH", "PUT", "DELETE"],
+    credentials: true,
   })
 );
 app.use(express.json({ limit: "20kb" }));
