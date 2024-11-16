@@ -62,7 +62,7 @@ function Dashboard() {
     );
   else if (data?.role == "sudo-admin" || data?.role == "teacher")
     return (
-      <div className="h-auto min-h-svh w-full bg-white text-black poppins-bold overflow-y-scroll flex flex-row relative ">
+      <div className="h-auto min-h-svh w-full bg-white text-black inter-medium overflow-y-scroll flex flex-row relative ">
         <div>
           <button
             className="bg-blue-50 p-4 rounded-md  text-blue-600 z-50 absolute right-6 top-1 my-2 lg:hidden"
@@ -81,7 +81,7 @@ function Dashboard() {
 
         <div className="m-5 grid w-full h-fit px-5">
           <h2 className=" text-center text-3xl xl:text-4xl mt-5 mb-10">
-            ACSExam Dashboard TEACHER
+          Educrafters Dashboard TEACHER
           </h2>
           <Outlet />
         </div>

@@ -18,9 +18,12 @@ const submitExamSchema = new Schema({
     required: true,
   },
   submitData: {
-    type: Array,
+    type: Schema.Types.Array,
     required: true, 
   },
+  submitTime: {
+    type: Schema.Types.Date
+  }
 });
 
 const SubmitExam = mongoose.model("SubmitExam", submitExamSchema);

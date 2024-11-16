@@ -1,7 +1,9 @@
 const express = require("express");
 const { Exam, Question } = require("../../model/exam.model.js");
+const AdminUser = require("../../model/adminUser.model.js");
 const router = express.Router();
 
+// create new exam
 router.post("/create", async (req, res) => {
   const data = req.body;
 
@@ -21,9 +23,13 @@ router.post("/create", async (req, res) => {
       .send({ status: false, message: "Failed to create new Exam" });
   }
 });
+// add question
 router.post("/addquestion/:examid", async (req, res) => {
   const data = req.body;
   const { examid } = req.params;
+  console.log(data);
+  // res.send({ status: true, message: "Question added" });
+  // return ;
 
   try {
     const question = await Question.create(data);
@@ -56,6 +62,53 @@ router.post("/addquestion/:examid", async (req, res) => {
       .send({ status: false, message: "Failed to add question. Try again" });
   }
 });
+// delete question
+router.delete("/delquestion/:examid", async (req, res) => {
+  const _id = req.params.examid;
+  // reaquest header auth token
+  const uid = req.headers.authorization?.split(" ")[1];
+
+  try {
+    const checkAdmin = await AdminUser.findOne().where("uid").equals(uid);
+    console.log(checkAdmin);
+    if (!checkAdmin) {
+      res.status(204).send({
+        status: false,
+        message: "You are not authorized to delete this question",
+      });
+      return;
+    } else if (!checkAdmin.permission) {
+      res.status(204).send({
+        status: false,
+        message: "You are not authorized to delete this question",
+      });
+      return;
+    } else {
+      const question = await Question.findByIdAndDelete(_id);
+      if (question) {
+        console.log("question deleted");
+
+        res.status(201).send({
+          status: true,
+          message: `${_id} Question deleted`,
+          deletedId: question?._id,
+        });
+      } else
+        res.status(204).send({
+          status: false,
+          message:
+            "Failed to update exam but you can manually add this question later.",
+        });
+      return;
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(404)
+      .send({ status: false, message: "Failed to add question. Try again" });
+  }
+});
+// delete exam
 router.post("/delete", async (req, res) => {
   const { _id } = req.body;
   try {

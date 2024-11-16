@@ -6,7 +6,7 @@ import {
   MdDashboardCustomize,
 } from "react-icons/md";
 
-import logo from "/swiftcrab.svg";
+import logo from "/logo.svg";
 import { auth } from "../Config/firebase-config";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,7 +26,7 @@ function AdminNavbar() {
           <button className="btn bg-blue-600 text-white border-none scale-75 md:scale-90 xl:scale-100">
             <p className="inline-flex h-fit text-lg xl:text-xl items-center gap-1 justify-center">
               <img src={logo} className="object-cover px-2" width={50} alt="" />{" "}
-              ACSExam
+              Educrafters
             </p>
           </button>
         </div>

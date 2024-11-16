@@ -6,11 +6,11 @@ function AdminHome() {
   const { data, error } = fetchAdminInfo(token||'');
    
   return (
-    <div className="container text-white p-10 w-full mx-auto grid justify-center items-center flex-col text-center">
-      <h2 className="stat-title text-5xl my-10">Admin Page</h2>
+    <div className="container p-10 w-full mx-auto grid justify-center items-center flex-col text-center">
+      <h2 className="text-5xl my-10">Admin Page</h2>
       <div className="mt-20 space-y-6">
         <p className="text-3xl text-blue-300">
-          Welcome to ACSExam Admin Panel
+          Welcome to Educrafters Admin Panel
         </p>
         <p
           className="text-lg aria-hidden:hidden"
@@ -18,12 +18,12 @@ function AdminHome() {
         >
           You have to{" "}
           <NavLink
-            className={"link-primary text-2xl"}
+            className={"link-primary text-blue-500 text-2xl"}
             to="/swift-admin/account"
           >
             login
           </NavLink>{" "}
-          to control over Swiftcrab admin.
+          to control over Educrafters admin.
         </p>
       </div>
     </div>

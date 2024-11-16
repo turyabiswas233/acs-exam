@@ -8,7 +8,7 @@ function Transaction() {
 
   return (
     <div className="py-20 break-word max-w-3xl mx-auto">
-      <h2 className="text-center font-bold text-4xl text-gray-50">
+      <h2 className="text-center font-medium text-4xl text-gray-50">
         Login with ACS credential
       </h2>
       <form

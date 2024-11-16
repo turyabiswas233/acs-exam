@@ -19,6 +19,7 @@ function AdminExamForm() {
     "Medical",
     "Academic",
     "Board",
+    "নিবন্ধন ১৯",
   ];
   const handleCreate = (e) => {
     e.preventDefault();
@@ -125,6 +126,7 @@ function AdminExamForm() {
                 </option>
                 <option value="SSC">SSC</option>
                 <option value="HSC">HSC</option>
+                <option value="Job Exam">Job Exam</option>
               </optgroup>
             </select>
           </section>

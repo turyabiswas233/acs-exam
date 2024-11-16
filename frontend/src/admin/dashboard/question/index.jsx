@@ -253,36 +253,75 @@ function AdminQuestion() {
 
   const handlePushQuestion = (e) => {
     e.preventDefault();
+    let isAllowed = false;
+    questionInfo.options.forEach((opt) => {
+      if (opt.isCorrect) {
+        isAllowed = true;
+      }
+    });
 
-    axios
-      .post(
-        `${API_URL}sadmin/exam/addquestion/${examid}`,
-        {
-          question: questionInfo.qt,
-          options: questionInfo.options,
-          questype: questionInfo.questype,
-          solve: questionInfo.solve,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+    if (!isAllowed) {
+      alert("Please select a correct option");
+      return;
+    } else
+      axios
+        .post(
+          `${API_URL}sadmin/exam/addquestion/${examid}`,
+          {
+            question: questionInfo.qt,
+            options: questionInfo.options,
+            questype: questionInfo.questype,
+            solve: questionInfo.solve,
           },
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        alert(res.data.message);
-        if (res.data.status) {
-          window.location.reload();
-        }
-      })
-      .catch((err) => alert(err.response.data.message));
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          alert(res.data.message);
+          if (res.data.status) {
+            window.location.reload();
+          }
+        })
+        .catch((err) => alert(err.response.data.message));
   };
 
+  const handleImage = (e) => {
+    e.preventDefault();
+    if (!e.target.files[0]) return;
+    const formData = new FormData();
+    formData.append("photo", e.target.files[0]);
+    axios
+      .post(API_URL + "api/file/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const getImage = async () => {
+    try {
+      const res = await axios.get(
+        API_URL + "api/file/get/67389960f87478a3e5798669"
+      );
+      console.log(res)
+    } catch (error) {}
+  };
+  useEffect(()=>{
+    getImage()
+  }, [])
   return (
-    <div className="poppins-regular overflow-x-hidden p-10 w-full">
+    <div className="inter-regular overflow-x-hidden p-10 w-full">
       <ExamInfo />
-      <h2 className="text-3xl text-center poppins-semibold">Create question</h2>
+      <h2 className="text-3xl text-center inter-semibold">Create question</h2>
 
       <div className="main">
         <div className="rounded-lg my-5 shadow-md mx-auto max-w-screen-xl">
@@ -320,13 +359,21 @@ function AdminQuestion() {
             >
               {/* question field */}
               <section>
-                <h2 className="text-left card-title poppins-medium text-3xl">
+                <h2 className="text-left card-title inter-medium text-3xl">
                   Question
                 </h2>
                 <MathEditor
                   value={questionInfo.qt}
                   handleChange={(e) => setQuestion((p) => ({ ...p, qt: e }))}
                 />
+                {/* <input
+                  type="file"
+                  name="photo"
+                  id="photo"
+                  accept="image/*"
+                  multiple={false}
+                  onChange={handleImage}
+                /> */}
               </section>
               {/* options list */}
               <div
@@ -409,7 +456,7 @@ function AdminQuestion() {
 
               {/* question field */}
               <section>
-                <h2 className="text-left card-title poppins-medium text-3xl">
+                <h2 className="text-left card-title inter-medium text-3xl">
                   Solution
                 </h2>
                 <MathEditor

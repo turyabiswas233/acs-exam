@@ -5,23 +5,31 @@ const API_URL = import.meta.env.APP_URL;
 function Leaderboard() {
   const [list, setList] = useState([]);
   const { user } = useAuth();
-
+  const [limit, setLimit] = useState(100);
+  const [short, setShort] = useState(-1);
   const fetchLeaderboard = async () => {
-    alert("hi")
     try {
-      axios.get(API_URL + `sadmin/exam/${user?.uid}`).then((res) => {
-        console.log(res.data);
-        if (res.data.status) {
-          setList(res.data);
-        }
-      });
+      axios
+        .get(API_URL + `sadmin/leaderboard?limit=${limit}&shortType=${short}`, {
+          headers: {
+            Authorization: `Bearer ${user?.uid}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.status) {
+            setList(res.data?.list);
+          }
+        });
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     fetchLeaderboard();
-  }, []);
+  }, [user, limit, short]);
   return (
     <div className="w-full h-svh bg-white rounded-md p-5">
       <h2 className="my-5 text-center font-bold text-black text-5xl">

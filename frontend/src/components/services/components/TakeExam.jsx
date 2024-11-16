@@ -1,17 +1,16 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import ExamQuestion from "./ExamQuestion";
 import Timer from "./Timer";
 import { auth } from "../../../Config/firebase-config";
-import { useId } from "react";
 
 const API_URL = import.meta.env.APP_URL;
 
 function TakeExam({ id, onFinishDemand }) {
   const { user, isAuthenticated } = useAuth();
   const [data, setdata] = useState({});
+  const { load, setLoad } = useState(false);
   const [mcqAnswers, setMcqAnswers] = useState([]);
 
   const fetchQuestion = async () => {
@@ -59,10 +58,31 @@ function TakeExam({ id, onFinishDemand }) {
           questionNumber={i + 1}
           onUpdate={(optionsIds) => {
             console.log(optionsIds);
-            setMcqAnswers([
+            setMcqAnswers((pre) => {
+              /**
+                [
               ...mcqAnswers,
               { questionId: question.id, options: optionsIds },
-            ]);
+            ]
+               */
+              const newData = [...pre];
+              if (newData.length === 0) {
+                newData.push({ questionId: question.id, options: optionsIds });
+              } else {
+                const index = newData.findIndex(
+                  (ans) => ans.questionId === question.id
+                );
+                if (index === -1) {
+                  newData.push({
+                    questionId: question.id,
+                    options: optionsIds,
+                  });
+                } else {
+                  newData[index].options = optionsIds;
+                }
+              }
+              return newData;
+            });
           }}
         />
       );
@@ -98,42 +118,50 @@ function TakeExam({ id, onFinishDemand }) {
         };
       });
 
-      console.log(submitData);
+      try {
+        axios
+          .post(
+            API_URL + `api/live-exam/submit`,
+            {
+              userId: userId,
+              examId: examId,
+              isLiveExam: isLiveExam,
+              submitData: submitData || [],
+            },
+            {
+              withCredentials: true,
+            }
+          )
+          .then((res) => {
+            localStorage.clear();
+            data.questionsList.forEach((q) => {
+              const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
+              localStorage.removeItem(KEY_MCQ_ANSWERS);
+            });
+            let loop = setTimeout(() => {
+              clearTimeout(loop);
+              onFinishDemand();
+            }, 1000);
+          })
+          .catch((e) => alert("An error occured submitting the exam."))
+          .finally(() => setLoad(false));
+      } catch (error) {
+        console.log(error);
+        alert("An error occured submitting the exam.");
+      } finally {
+        setLoad(false);
+      }
 
-      axios
-        .post(
-          API_URL + `api/live-exam/submit`,
-          {
-            userId: userId,
-            examId: examId,
-            isLiveExam: isLiveExam,
-            submitData: submitData || [],
-          },
-          {
-            withCredentials: true,
-          }
-        )
-        .then((res) => {
-          // alert("Exam finished");
-          // window.location = "/";
-          console.log("Submitted");
-          onFinishDemand();
-
-          console.log(res);
-          data.questionsList.forEach((q) => {
-            const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
-            localStorage.removeItem(KEY_MCQ_ANSWERS);
-          });
-        })
-        .catch((e) => alert("An error occured submitting the exam."));
       console.log({ userId, examId, submitData });
 
       // clear mcq answers from local storage
     }
   };
-
+  if (load) {
+    return <div>Loading...</div>;
+  }
   return (
-    <div className="flex flex-col items-center bg-white w-full min-h-svh rounded-md p-5">
+    <div className="flex flex-col items-center bg-swhite w-full min-h-svh rounded-md p-5">
       <div className="flex justify-between w-full">
         <h2 className="relative text-blue-600 text-4xl text-center w-fit font-bold">
           Live Exam{" "}
@@ -150,7 +178,7 @@ function TakeExam({ id, onFinishDemand }) {
           />
         )}
       </div>
-      <h1 className="mb-4 mt-7 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+      <h1 className="mb-4 mt-7 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
         {data?.examname || "Demo Exam"}
       </h1>
       {questions}

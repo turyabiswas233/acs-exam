@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext"; 
-import { auth } from "../../Config/firebase-config"; 
+import { useAuth } from "../../context/AuthContext";
+import { auth } from "../../Config/firebase-config";
 import TakeExam from "./components/TakeExam";
 import ExamFinish from "./components/ExamFinish";
 import ExamReview from "./components/ExamReview";
@@ -17,22 +17,20 @@ function ExamPage() {
   const { id } = useParams();
 
   const { user, isAuthenticated } = useAuth();
-  const [ data, setdata] = useState({});
+  const [data, setdata] = useState({});
   // const [ mcqAnswers, setMcqAnswers] = useState([]);
 
-  const [ currentScreen, setCurrentScreen ] = useState(CONST_EXAM_PAGE_LOADING);
+  const [currentScreen, setCurrentScreen] = useState(CONST_EXAM_PAGE_LOADING);
 
   const checkPastExam = async () => {
-    // console.log(user);
-    const response = (
-      await axios.get(
-        API_URL + `api/live-exam/checkpastexam/${user?.uid}/${id}`
-      )
+    const response = await axios.get(
+      API_URL + `api/live-exam/checkpastexam/${user?.uid}/${id}`
     );
-    if ( response.data ){
-      if ( response.data.allowExam ){
+    console.log(response.data);
+    if (response.data) {
+      if (response.data.allowExam) {
         setCurrentScreen(CONST_TAKE_EXAM);
-      }else{
+      } else {
         setCurrentScreen(CONST_EXAM_REVIEW);
       }
     }
@@ -40,36 +38,38 @@ function ExamPage() {
   };
 
   useEffect(() => {
-    checkPastExam();
-  }, []);
+    if (user) checkPastExam();
+  }, [user]);
 
+  return (
+    <>
+      {currentScreen === CONST_TAKE_EXAM && (
+        <TakeExam
+          id={id}
+          onFinishDemand={() => {
+            setCurrentScreen(CONST_EXAM_FINISH);
+          }}
+        />
+      )}
 
+      {currentScreen === CONST_EXAM_FINISH && (
+        <ExamFinish
+          onReviewDemand={() => {
+            setCurrentScreen(CONST_EXAM_REVIEW);
+          }}
+        />
+      )}
 
-   
+      {currentScreen === CONST_EXAM_REVIEW && <ExamReview id={id} />}
 
-  return (<>
-    { currentScreen === CONST_TAKE_EXAM && <TakeExam id={id}
-        onFinishDemand = { ()=>{
-          setCurrentScreen(CONST_EXAM_FINISH);
-        }}
-    />}
-
-    { currentScreen === CONST_EXAM_FINISH && <ExamFinish 
-      onReviewDemand={()=>{
-        setCurrentScreen(CONST_EXAM_REVIEW);
-      }} />
-    }
-
-    { currentScreen === CONST_EXAM_REVIEW && <ExamReview id={ id } /> }
-
-    { 
-      currentScreen === CONST_EXAM_PAGE_LOADING
-      && <div className="text-white bg-gray-900 rounded-sm w-full p-6">
+      {currentScreen === CONST_EXAM_PAGE_LOADING && (
+        <div className="text-white bg-gray-900 rounded-sm w-full p-6">
           <p>Keep patience</p>
           <progress className="progress w-56"></progress>
-      </div>
-    }
-  </>);
+        </div>
+      )}
+    </>
+  );
 }
 
 export default ExamPage;

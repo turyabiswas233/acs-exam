@@ -22,7 +22,7 @@ function App() {
     <div className="min-h-screen py-20 px-2">
       <div className="flex flex-col gap-4 md:flex-row items-start mb-20">
         <Banner />
-        <StaticData />
+        {/* <StaticData /> */}
       </div>
       {/* <Transaction /> */}
     </div>

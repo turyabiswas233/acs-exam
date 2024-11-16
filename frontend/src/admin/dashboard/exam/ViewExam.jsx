@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { MdCheckCircle } from "react-icons/md";
+import { MdCheckCircle, MdDelete } from "react-icons/md";
 import { LuLoader } from "react-icons/lu";
 import axios from "axios";
 const url = import.meta.env.APP_URL;
@@ -8,7 +8,6 @@ const url = import.meta.env.APP_URL;
 function ViewExam() {
   const { examid } = useParams();
   const [data, setData] = useState(null);
-  const [queryList, setQueryList] = useState([]);
   const [load, setLoad] = useState(false);
   async function getData() {
     try {
@@ -43,6 +42,9 @@ function ViewExam() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <ExamBody queryList={data?.questionsList} />
           </div>
+          {data?.questionsList?.length === 0 && (
+            <div className="text-center text-2xl">No Questions Found</div>
+          )}
         </>
       )}
     </div>
@@ -64,7 +66,7 @@ const ExamHeader = ({
   const endtime = new Date(data?.endtime);
   const { examid } = useParams();
   return (
-    <div className="font-thin">
+    <div className="font-normal">
       <p>{data?.examname}</p>
       <p>
         Start Time: {startTime.toDateString()}, {endtime.toLocaleTimeString()}
@@ -82,7 +84,10 @@ const ExamHeader = ({
   );
 };
 const ExamBody = ({ queryList = [] }) => {
+  const [load,setLoad] = useState(false)
   return queryList.map((q, qid) => {
+    const [delId, setDelId] = useState(null);
+    if (delId === q?._id) return;
     return (
       <div key={q?._id} className="my-10">
         <section className="flex items-start gap-2">
@@ -91,13 +96,50 @@ const ExamBody = ({ queryList = [] }) => {
             className="text-xl"
             dangerouslySetInnerHTML={{ __html: q?.question }}
           ></h2>
+          <button
+            type="button"
+            className="text-red-500 hover:text-red-700"
+            disabled={load}
+            onClick={async () => {
+              const check = window.confirm(
+                "Are you sure you want to delete this question?"
+              );
+              if (check) {
+                try {
+                  setLoad(true);
+                  const res = await axios.delete(
+                    `${url}sadmin/exam/delquestion/${q?._id}`,
+                    {
+                      withCredentials: true,
+                      headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                          "authToken"
+                        )}`,
+                      },
+                    }
+                  );
+                  if (res.data.status) {
+                    setDelId(res.data.deletedId);
+                  }
+                } catch (error) {
+                  console.log(error);
+                } finally {
+                  setLoad(false);
+                }
+              }
+            }}
+          >
+          {load ? <LuLoader /> :  <MdDelete size={"1.25rem"} />}
+          </button>
         </section>
 
         <ul className="grid gap-2 my-4">
           {q?.options?.map((op) => (
             <li
-              className={`flex items-center font-medium justify-between gap-2 ring-1 ${
-                op?.isCorrect ? "bg-green-100 ring-green-300" : "bg-slate-100 ring-slate-300"
+              className={`flex items-center font-normal justify-between gap-2 ring-1 ${
+                op?.isCorrect
+                  ? "bg-green-100 ring-green-300"
+                  : "bg-slate-100 ring-slate-300"
               } p-2 rounded-md`}
               key={`${q?._id}--${op?.id}`}
             >
@@ -113,7 +155,10 @@ const ExamBody = ({ queryList = [] }) => {
           <li>
             Solve:{" "}
             {q?.solve ? (
-              <div className="bg-slate-50 ring-1 ring-slate-300 rounded-md px-4 py-2 text-slate-900" dangerouslySetInnerHTML={{ __html: q?.solve }}></div>
+              <div
+                className="bg-slate-50 ring-1 ring-slate-300 rounded-md px-4 py-2 text-slate-900"
+                dangerouslySetInnerHTML={{ __html: q?.solve }}
+              ></div>
             ) : (
               "--"
             )}
@@ -125,18 +170,6 @@ const ExamBody = ({ queryList = [] }) => {
 };
 
 function serialKey(key) {
-  switch (key) {
-    case 1:
-      return "A";
-    case 2:
-      return "B";
-    case 3:
-      return "C";
-    case 4:
-      return "D";
-
-    default:
-      return "-";
-  }
+  return String.fromCharCode(64 + key);
 }
 export default ViewExam;

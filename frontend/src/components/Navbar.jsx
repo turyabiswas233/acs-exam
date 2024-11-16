@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import logo from "/swiftcrab.svg";
+import logo from "/logo.svg";
 import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
@@ -32,7 +32,7 @@ function Navbar() {
   return (
     <>
       <div
-        className={`sticky top-0 left-0 right-0 z-50 shadow-md shadow-blue-500/10 bg-base-200 transition-all ease-in-out duration-300 `}
+        className={`sticky bg-sblack top-0 left-0 right-0 z-50 shadow-md shadow-slate-500 transition-all ease-in-out duration-300 `}
       >
         <div className="navbar px-5 md:px-10">
           <div className="navbar-start">
@@ -40,7 +40,7 @@ function Navbar() {
               to="/"
               className="btn btn-ghost normal-case text-base sm:text-xl flex items-center "
             >
-              <img src={logo} alt="Logo" className="w-18 h-8 mr-2" /> Swiftcrab
+              <img src={logo} alt="Logo" className="w-18 h-8 mr-2" /> Educrafters
             </Link>
           </div>
 
@@ -51,13 +51,13 @@ function Navbar() {
           <div className="navbar-end flex items-center space-x-4">
             {user != null ? (
               <NavLink to={"/settings"}>
-                <button className="btn btn-primary  font-medium hover:bg-blue-700/50 hover:text-blue-300 ring-1 ring-blue-500 transition">
+                <button className="btn btn-primary  font-normal hover:bg-blue-700/50 hover:text-blue-300 ring-1 ring-blue-500 transition">
                   Profile
                 </button>
               </NavLink>
             ) : (
               <button
-                className="btn btn-primary"
+                className="btn btn-primary bg-blue-600 hover:bg-blue-700"
                 onClick={() =>
                   // document.getElementById("my_modal_3").showModal()
                   navigate("/login")

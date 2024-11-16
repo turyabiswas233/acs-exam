@@ -44,7 +44,7 @@ function AdminDash() {
     );
   else if (data && data?.role == "sudo-admin")
     return (
-      <div className="h-full w-full bg-white text-black poppins-bold overflow-y-scroll flex flex-row relative ">
+      <div className="h-full w-full bg-white text-black inter-medium overflow-y-scroll flex flex-row relative ">
         <button
           className="bg-blue-50 p-4 rounded-md  text-blue-600 z-50 absolute right-6 top-1 my-2 lg:hidden"
           onClick={() => {
@@ -61,7 +61,7 @@ function AdminDash() {
 
         <div className="m-5 grid w-full h-fit max-w-screen-2xl mx-auto p-3 md:p-5 transition-all">
           <h2 className=" text-center text-3xl xl:text-4xl my-5">
-            ACSExam Dashboard ADMIN
+          Educrafters Dashboard ADMIN
           </h2>
 
           <div className="my-2">

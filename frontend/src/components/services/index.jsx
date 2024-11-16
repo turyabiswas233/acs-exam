@@ -1,41 +1,15 @@
 import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { FaArrowDown, FaArrowRight } from "react-icons/fa";
+import { useAuth } from "../../context/AuthContext";
 const linklist = [
-  /*
-  {
-    title: "Eligibility Checker",
-    children: [
-      {
-        link: "/services/eligibility/public",
-        title: "Public University",
-      },
-      {
-        link: "/services/eligibility/private",
-        title: "Private University",
-      },
-      {
-        link: "/services/eligibility/admitcart",
-        title: "Admit",
-      },
-      {
-        link: "/services/eligibility/result",
-        title: "Result",
-      },
-    ],
-  },
-*/
   {
     title: "Exam Site",
     children: [
-      {
-        link: "/#",
-        title: "Study",
-      },
-      {
-        link: "/services/exam/practice",
-        title: "Practice",
-      },
+      // {
+      //   link: "/services/exam/practice",
+      //   title: "Practice",
+      // },
       {
         link: "/services/exam/challenge",
         title: "Live Exam",
@@ -48,11 +22,12 @@ const linklist = [
   },
 ];
 function Services() {
+  const { user } = useAuth();
   return (
     <div className="p-2">
       <div className="flex flex-col lg:flex-row gap-3">
-        <div className="bg-white p-3 lg:h-dvh rounded-lg w-full lg:max-w-sm flex flex-col">
-          <h2 className="text-center p-4 text-black text-xl">Our Services</h2>
+        <div className="bg-white text-black p-3 rounded-lg w-full lg:max-w-sm flex flex-col">
+          <h2 className="text-center p-4 text-xl">Our Services</h2>
           <div className="flex flex-col space-y-2 text-sm">
             {/* navlist below */}
             <NavList />
@@ -60,7 +35,15 @@ function Services() {
         </div>
         {/* page children outlet */}
         <div className="flex-1">
-          <Outlet />
+          {user ? (
+            <Outlet />
+          ) : (
+            <div className="bg-white rounded-md w-full mx-auto p-5">
+              <h3 className="text-2xl text-center">
+                Please login to view the Page
+              </h3>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -68,10 +51,10 @@ function Services() {
 }
 
 const NavList = () => {
-  const [toggleId, setTID] = useState(-1);
+  const [toggleId, setTID] = useState(0);
   const handleToggle = (value) => {
-    if (value === toggleId) setTID(-1);
-    else setTID(value);
+    // if (value === toggleId) setTID(-1);
+    setTID(value);
   };
   return (
     <>

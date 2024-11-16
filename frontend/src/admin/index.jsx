@@ -15,7 +15,7 @@ const AdminRoot = () => {
   const { data, error } = fetchAdminInfo(token || "");
 
   return (
-    <div className="w-screen h-screen left-0 top-0 fixed overflow-y-auto overflow-x-hidden">
+    <div className="w-screen h-screen left-0 top-0 fixed overflow-y-auto overflow-x-hidden bg-sblack text-white">
       <AdminNavbar />
       <Outlet />
     </div>

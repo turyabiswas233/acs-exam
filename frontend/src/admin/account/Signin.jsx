@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { LuLoader } from "react-icons/lu";
 import Input from "../Input";
 import { AuthContext } from "../../context/AuthContext";
 import { auth } from "../../Config/firebase-config";
@@ -23,6 +24,7 @@ function Signin() {
   });
   const [pass, setPass] = useState("");
   const [loginStat, setStat] = useState(null);
+  const [load, setLoad] = useState(false);
   const [user] = useContext(AuthContext);
   const { data, error } = fetchAdminInfo(user?.uid || "");
 
@@ -41,24 +43,50 @@ function Signin() {
 
   function getSecretKey(e) {
     e.preventDefault();
+    try {
+      setLoad(true);
+      signInWithEmailAndPassword(auth, adminInfo.email, pass)
+        .then(async (res) => {
+          if (!data)
+            setStat({
+              success: false,
+              message: "No valid user found as Teacher/Admin",
+            });
+        })
+        .catch((err) => {
+          console.log({ ...err });
+          if (err.code === "auth/invalid-credential")
+            setStat({ success: false, message: "Wrong email or password" });
+          else if (err.code === "auth/too-many-requests")
+            setStat({
+              success: false,
+              message: "Too many attempts. Try later.",
+            });
+          else setStat({ success: false, message: "Failed to login" });
 
-    signInWithEmailAndPassword(auth, adminInfo.email, pass)
-      .then(async (res) => {
-        if (!data)
-          setStat({
-            success: false,
-            message: "No valid user found as Teacher/Admin",
-          });
-      })
-      .catch((err) => {
-        console.log({ ...err });
-        if (err.code === "auth/invalid-credential")
-          setStat({ success: false, message: "Wrong email or password" });
-        else if (err.code === "auth/too-many-requests")
-          setStat({ success: false, message: "Too many attempts. Try later." });
-        else setStat({ success: false, message: "Failed to login" });
-      });
+          auth.signOut();
+        })
+        .finally(() => {
+          setLoad(false);
+        });
+    } catch (error) {
+      console.log(error);
+      setLoad(false);
+    } finally {
+      setLoad(false);
+    }
   }
+  useEffect(() => {
+    let loop;
+    if (user) {
+      if (data  == null) {
+        loop = setTimeout(() => {
+          auth.signOut();
+        }, 1000);
+        return () => clearTimeout(loop);
+      } else return ()=> clearInterval(loop);
+    }
+  }, [user, data]);
 
   return (
     <div className="w-full grid place-items-center p-3">
@@ -106,14 +134,18 @@ function Signin() {
               helpTitle={`Your secret key is totally different from your password.\nYou may get it from your office..`}
             />
           )}
-
-          <button
-            className="w-full btn border-none bg-blue-600 hover:bg-blue-700 text-white dm-sans-medium"
-            type="submit"
-            required={true}
-          >
-            Sign In
-          </button>
+          {load ? (
+            <LuLoader size={32} className="animate-spin" />
+          ) : (
+            <button
+              className="w-full btn border-none bg-blue-600 hover:bg-blue-700 text-white dm-sans-medium"
+              type="submit"
+              required={true}
+              disabled={load}
+            >
+              Sign In
+            </button>
+          )}
           <div>
             {loginStat != null &&
               (loginStat?.success ? (
@@ -139,7 +171,7 @@ function Signin() {
         </form>
       ) : !data ? (
         <p className="text-red-500 text-xl font-bold">
-          {error || "An error occurred"}
+          {"No valid user found as Teacher/Admin"}
         </p>
       ) : (
         <div className="bg-white rounded-2xl shadow-lg text-black space-y-3 mt-8 p-10 grid text-sm md:text-base mx-auto">
@@ -201,7 +233,7 @@ function Signin() {
                 className="text-sm btn border-0 bg-green-500 hover:bg-green-700 text-white"
                 type="button"
                 onClick={() => {
-                  const url = window.location.origin; 
+                  const url = window.location.origin;
                   // return;
                   sendEmailVerification(user, {
                     url: `${url}/swift-admin/account/verified`,
@@ -209,7 +241,7 @@ function Signin() {
                     .then(() => {
                       alert("An email has been sent to " + user?.email);
                     })
-                    .catch((err) => console.warn("error",err));
+                    .catch((err) => console.warn("error", err));
                 }}
               >
                 Verify

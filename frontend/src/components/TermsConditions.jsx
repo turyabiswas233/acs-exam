@@ -7,17 +7,17 @@ function TermsConditions() {
         <strong>Terms and Conditions</strong>
       </h2>
 
-      <p>Welcome to swiftcrab!</p>
+      <p>Welcome to Educrafters!</p>
 
       <p>
         These terms and conditions outline the rules and regulations for the use
-        of SwiftCrab's Website, located at{" "}
-        <a href="https://swiftcrab.com/">https://swiftcrab.com/</a>.
+        of Educrafters's Website, located at{" "}
+        <a href="https://educrafters.vercel.app/">https://educrafters.vercel.app/</a>.
       </p>
 
       <p>
         By accessing this website we assume you accept these terms and
-        conditions. Do not continue to use swiftcrab if you do not agree to take
+        conditions. Do not continue to use Educrafters if you do not agree to take
         all of the terms and conditions stated on this page.
       </p>
 
@@ -42,8 +42,8 @@ function TermsConditions() {
       </h3>
 
       <p>
-        We employ the use of cookies. By accessing swiftcrab, you agreed to use
-        cookies in agreement with the SwiftCrab's Privacy Policy.{" "}
+        We employ the use of cookies. By accessing Educrafters, you agreed to use
+        cookies in agreement with the Educrafters's Privacy Policy.{" "}
       </p>
 
       <p>
@@ -59,36 +59,36 @@ function TermsConditions() {
       </h3>
 
       <p>
-        Unless otherwise stated, SwiftCrab and/or its licensors own the
-        intellectual property rights for all material on swiftcrab. All
+        Unless otherwise stated, Educrafters and/or its licensors own the
+        intellectual property rights for all material on Educrafters. All
         intellectual property rights are reserved. You may access this from
-        swiftcrab for your own personal use subjected to restrictions set in
+        Educrafters for your own personal use subjected to restrictions set in
         these terms and conditions.
       </p>
 
       <p>You must not:</p>
       <ul>
-        <li>Republish material from swiftcrab</li>
-        <li>Sell, rent or sub-license material from swiftcrab</li>
-        <li>Reproduce, duplicate or copy material from swiftcrab</li>
-        <li>Redistribute content from swiftcrab</li>
+        <li>Republish material from Educrafters</li>
+        <li>Sell, rent or sub-license material from Educrafters</li>
+        <li>Reproduce, duplicate or copy material from Educrafters</li>
+        <li>Redistribute content from Educrafters</li>
       </ul>
 
       <p>
         Parts of this website offer an opportunity for users to post and
         exchange opinions and information in certain areas of the website.
-        SwiftCrab does not filter, edit, publish or review Comments prior to
+        Educrafters does not filter, edit, publish or review Comments prior to
         their presence on the website. Comments do not reflect the views and
-        opinions of SwiftCrab,its agents and/or affiliates. Comments reflect the
+        opinions of Educrafters,its agents and/or affiliates. Comments reflect the
         views and opinions of the person who post their views and opinions. To
-        the extent permitted by applicable laws, SwiftCrab shall not be liable
+        the extent permitted by applicable laws, Educrafters shall not be liable
         for the Comments or for any liability, damages or expenses caused and/or
         suffered as a result of any use of and/or posting of and/or appearance
         of the Comments on this website.
       </p>
 
       <p>
-        SwiftCrab reserves the right to monitor all Comments and to remove any
+        Educrafters reserves the right to monitor all Comments and to remove any
         Comments which can be considered inappropriate, offensive or causes
         breach of these Terms and Conditions.
       </p>
@@ -116,7 +116,7 @@ function TermsConditions() {
       </ul>
 
       <p>
-        You hereby grant SwiftCrab a non-exclusive license to use, reproduce,
+        You hereby grant Educrafters a non-exclusive license to use, reproduce,
         edit and authorize others to use, reproduce and edit any of your
         Comments in any and all forms, formats or media.
       </p>
@@ -174,7 +174,7 @@ function TermsConditions() {
         that: (a) the link would not make us look unfavorably to ourselves or to
         our accredited businesses; (b) the organization does not have any
         negative records with us; (c) the benefit to us from the visibility of
-        the hyperlink compensates the absence of SwiftCrab; and (d) the link is
+        the hyperlink compensates the absence of Educrafters; and (d) the link is
         in the context of general resource information.
       </p>
 
@@ -188,7 +188,7 @@ function TermsConditions() {
       <p>
         If you are one of the organizations listed in paragraph 2 above and are
         interested in linking to our website, you must inform us by sending an
-        e-mail to SwiftCrab. Please include your name, your organization name,
+        e-mail to Educrafters. Please include your name, your organization name,
         contact information as well as the URL of your site, a list of any URLs
         from which you intend to link to our Website, and a list of the URLs on
         our site to which you would like to link. Wait 2-3 weeks for a response.
@@ -207,7 +207,7 @@ function TermsConditions() {
       </ul>
 
       <p>
-        No use of SwiftCrab's logo or other artwork will be allowed for linking
+        No use of Educrafters's logo or other artwork will be allowed for linking
         absent a trademark license agreement.
       </p>
 

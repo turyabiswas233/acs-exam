@@ -1,10 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  font-style: normal;
+  background-color: #070113;
 }
 
 select {
@@ -75,50 +79,48 @@ a.active {
   font-family: "Bangla", sans-serif !important;
 }
 
-.poppins-regular {
-  font-family: "Poppins", sans-serif;
+
+.inter-regular {
+  font-family: "Inter", sans-serif;
   font-weight: 400;
+  font-optical-sizing: auto;
   font-style: normal;
 }
 
-.poppins-medium {
-  font-family: "Poppins", sans-serif;
+.inter-medium {
+  font-family: "Inter", sans-serif;
   font-weight: 500;
+  font-optical-sizing: auto;
   font-style: normal;
 }
 
-.poppins-semibold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-style: normal;
-}
 
-.poppins-bold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
 table.leader {
   width: 100%;
 }
+
 table.leader td {
   padding: 12pt 5pt;
 }
 
 @keyframes bnc {
+
   0%,
   100% {
     transform: translateY(-25%);
     animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
+
   50% {
     transform: none;
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
 }
+
 .custom-bounce {
   animation: bnc 1s infinite;
 }
+
 .custom-bounce:nth-child(2) {
   animation-delay: 0.5s;
 }

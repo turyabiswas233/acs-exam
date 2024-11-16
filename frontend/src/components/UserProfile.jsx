@@ -12,6 +12,7 @@ import {
 import { MdVerified } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Toast from "./Toast";
+import { LuLoader } from "react-icons/lu";
 
 function UserProfile() {
   const [user, isAuthenticated] = useContext(AuthContext);
@@ -23,6 +24,7 @@ function UserProfile() {
   const [oldPass, setOPass] = useState("");
   const [loading, setload] = useState(true);
   const [err, seterr] = useState("");
+
   const [toast, showToast] = useState("");
   const navigate = useNavigate();
 
@@ -58,30 +60,31 @@ function UserProfile() {
     }, 5000);
   }, []);
 
-  useEffect(() => {
-    async function fetchUser() {
-      let url = import.meta.env.APP_URL || "";
+  async function fetchUser() {
+    let url = import.meta.env.APP_URL || "";
 
-      try {
-        console.log("called");
-
-        const response = await axios.get(`${url}api/user`, {
-          method: "GET",
-          params: {
-            uid: auth?.currentUser?.uid,
-          },
-        });
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch user");
-        }
-        const resultData = await response.data;
-
-        setData(resultData?.user);
-        // console.log(resultData);
-      } catch (error) {
-        console.error("Error fetching results:", error);
+    try {
+      setload(true);
+      const response = await axios.get(`${url}api/user`, {
+        method: "GET",
+        params: {
+          uid: auth?.currentUser?.uid,
+        },
+      });
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch user");
       }
+      const resultData = await response.data;
+
+      setData(resultData?.user);
+      // console.log(resultData);
+    } catch (error) {
+      console.error("Error fetching results:", error);
+    } finally {
+      setload(false);
     }
+  }
+  useEffect(() => {
     fetchUser();
   }, [user]);
 
@@ -94,13 +97,19 @@ function UserProfile() {
       return;
     } else
       try {
+        if(data?.displayName === fname && data?.phone === phone){
+          alert("Nothing to update");
+
+          return;
+        }
         let newData;
         seterr("");
+        setload(true);
         if (data?._id) {
           await axios
             .patch(`${url}api/user/update/profile/${data?._id}`, {
               displayName: fname,
-              phone: phone,
+              phone: `${phone}`,
             })
             .then(async (res) => {
               newData = res.data?.data;
@@ -116,6 +125,8 @@ function UserProfile() {
         } else showToast("pfailed");
       } catch (error) {
         showToast("pfailed");
+      } finally {
+        setload(false);
       }
   }
 
@@ -197,7 +208,7 @@ function UserProfile() {
           )}
         </header>
         <div>
-          <div className="modal-box w-full">
+          <div className=" w-auto rounded-xl p-5 shadow-lg shadow-slate-100 m-5">
             <h2 className="text-green-600 underline text-xl underline-offset-4">
               Current status{" "}
               <span className="text-sm text-blue-400 ">
@@ -273,15 +284,6 @@ function UserProfile() {
                 className="mx-auto relative w-full bg-slate-100 px-5 py-10 rounded-2xl text-sblack ring-1 ring-sblack"
                 onSubmit={updateProfileInfo}
               >
-                {toast == "profile" && (
-                  <Toast message={"Profile updated"} success={true} />
-                )}
-                {toast == "pfailed" && (
-                  <Toast
-                    message={"Profile not updated. Try again."}
-                    success={false}
-                  />
-                )}
                 <h1 className="text-lg font-semibold">Update Information</h1>
 
                 <section className="p-5 rounded-lg space-y-3 bg-slate-200 my-4 ring-2 ring-slate-200/20 w-full grid gap-1">
@@ -318,20 +320,40 @@ function UserProfile() {
                     id="email"
                   />
                 </section>
-                <section className="p-5 rounded-lg space-y-3 bg-slate-200 my-4 ring-2 ring-slate-200/20 w-full grid  gap-1">
+                <section className="p-5 rounded-lg space-y-3 bg-slate-200 my-4 ring-2 ring-slate-200/20 w-full grid  gap-1 ">
                   <label htmlFor="phone">Registered Phone Number</label>
+
                   <input
                     className="p-2 w-full text-base bg-transparent ring-2 ring-blue-500 border-none outline-none rounded-md "
                     type="tel"
                     value={phone}
                     name="phone"
-                    placeholder="New phone number"
-                    maxLength={20}
+                    placeholder="01xxxxxxxxx"
+                    minLength={11}
+                    onInvalid={(e) => {
+                      seterr("Please enter a   phone number");
+                    }}
+                    accept="number"
+                    onKeyDown={(e) => {
+                      if ((e.key >= 0 && e.key <= 9) || e.key == "Backspace")
+                        return true;
+                      e.preventDefault();
+                      return false;
+                    }}
                     id="phone"
                     onChange={(e) => setPhone(e.target.value)}
                   />
                 </section>
                 {err && <p className="text-xs text-rose-500">{err}</p>}
+                {toast == "profile" && (
+                  <Toast message={"Profile updated"} success={true} />
+                )}
+                {toast == "pfailed" && (
+                  <Toast
+                    message={"Profile not updated. Try again."}
+                    success={false}
+                  />
+                )}
                 <input
                   type="submit"
                   className="bg-blue-500 text-white mt-5 px-5 py-2 rounded-md cursor-pointer hover:bg-blue-600 transition-colors"

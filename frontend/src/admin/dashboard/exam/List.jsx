@@ -67,6 +67,7 @@ function AdminExamList() {
                   );
                 })}
             </section>
+            {exams.length === 0 && <p>No Exams found</p>}
           </div>
         ) : (
           "No Exams found"
@@ -81,17 +82,21 @@ const ExamCard = ({ exam, list, setData }) => {
   const endtime = new Date(exam?.endtime);
   const curTime = new Date().getTime();
   return (
-    <p className="px-4 my-2 rounded-md hover:bg-blue-50 hover:text-slate-900 transition-colors duration-100 ease-out font-thin text-sm grid grid-cols-6 text-center items-center">
+    <p className="px-4 py-2 rounded-md hover:bg-blue-50 hover:text-slate-900 transition-colors duration-100 ease-out font-light text-sm grid grid-cols-6 text-center items-center">
       <span className="font-bold px-2">
-        {exam?.examname} 
+        {exam?.examname}
         <span className="animate-pulse text-red-500 text-xs">
-
-        {curTime > starttime.getTime() && curTime < endtime.getTime() ? " live" : ""}
+          {curTime > starttime.getTime() && curTime < endtime.getTime()
+            ? " live"
+            : ""}
         </span>
       </span>
       <span className="px-2">
-        <span>{exam?.examclass}</span>
-        <span>{exam?.questype}</span>
+        <span className="bg-gray-200 rounded-full px-4">{exam?.examclass}</span>
+        <br />
+        <span className="bg-gray-200 rounded-full px-4">{exam?.questype}</span>
+        <br />
+        <span className="bg-gray-200 rounded-full px-4">{exam?.examtype}</span>
       </span>
 
       <span className="px-2">{starttime?.toLocaleString()}</span>

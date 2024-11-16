@@ -3,8 +3,6 @@ const express = require("express");
 const rateLimit = require("express-rate-limit");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const path = require("path");
-
 const resultRoute = require("./route/result.rote.js");
 const authRoute = require("./route/auth.route.js"); // const the = require route
 const userRouter = require("./route/user.route.js"); // Import the auth route
@@ -25,6 +23,9 @@ const examRouter = require("./route/admin/exam.route.js");
 const publicExamRouter = require("./route/exam/exam.route.js");
 const leaderboardRouter = require("./route/exam/leaderboard.route.js");
 const analysis = require("./route/admin/analysis.route.js");
+
+// image upload routes
+const uploadRouter = require("./route/exam/uploadImage.route.js");
 
 dotenv.config({ path: [".env", ".env.local"] });
 
@@ -54,6 +55,7 @@ app.use(
   cors({
     origin: [...BASE_URL],
     methods: ["POST", "GET", "PATCH", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
     credentials: true,
   })
 );
@@ -66,7 +68,7 @@ app.use("/api/user", userRouter); // Use the USER route
 app.use("/api/user/update", updateUser); // Use the USER route
 app.use("/api/user/update", updateHSC); // Use the USER/HSC route
 app.use("/api/user/update", updateSSC); // Use the USER/SSC route
-app.use("/api/questions", questionRouter);
+// app.use("/api/questions", questionRouter);
 app.use("/api/leaderboard", leaderboardRouter);
 app.use("/api/live-exam", publicExamRouter);
 
@@ -79,6 +81,10 @@ app.use("/sadmin/leaderboard", adminLeaderboard);
 app.use("/sadmin/exam", examRouter);
 app.use("/analysis", analysis);
 
+// image upload
+
+app.use("/api/file", uploadRouter);
+
 //never touch it
 // if (process.env.NODE_ENV == "production") {
 //   app.use(express.static("./output"));
@@ -88,9 +94,10 @@ app.use("/analysis", analysis);
 // }
 
 app.get("/", async (req, res) => {
-  res
-    .status(200)
-    .send({ data: "server connected and working well, baseurl-length:" + BASE_URL.length });
+  res.status(200).send({
+    data:
+      "server connected and working well, baseurl-length:" + BASE_URL.length,
+  });
 });
 
 // Start the server

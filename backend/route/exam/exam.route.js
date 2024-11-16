@@ -113,7 +113,7 @@ router.post("/submit", async (req, res) => {
           examId,
           submitData,
           isLiveExam,
-          submitTime: new Date().toISOString(),
+          submitTime: new Date(),
         });
         console.log(submitExam);
         submitExam.save();
@@ -137,13 +137,15 @@ router.post("/submit", async (req, res) => {
 router.get("/checkpastexam/:uid/:examid", async (req, res) => {
   const { examid, uid } = req.params;
   const user = await User.findOne({ uid: uid });
-  const submitData = await SubmitExam.findOne({
-    uiserId: user?._id,
+  const submitData = await SubmitExam.findOne().where({
+    userId: user?.id,
     examId: examid,
   });
 
-  if (submitData === null) {
+  console.log(submitData);
+  if (!submitData) {
     res.status(200).send({ allowExam: true, message: "no past record found" });
+    return;
   } else {
     const examInfo = await Exam.findById(examid).populate("questionsList");
 

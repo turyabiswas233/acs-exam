@@ -94,7 +94,7 @@ function Login() {
       if (user?.email) {
         navigate("/settings");
       }
-    }, 2000);
+    }, 1000);
     return () => clearTimeout(loop);
   }, [user]);
   return (
@@ -112,11 +112,11 @@ function Login() {
             <span>Name: {user?.displayName}</span> <br />
             <span>Phone: {user?.phoneNumber || "Not provided"}</span>
           </h2>
-          <Link to={"/"}>
+          {/* <Link to={"/"}>
             <button className="mt-2 px-4 py-2 text-blue-500 text-lg bg-white rounded-md shadow-inner hover:shadow-blue-500 transition">
               Go to Home {">>"}
             </button>
-          </Link>
+          </Link> */}
         </div>
       ) : (
         <form
@@ -174,7 +174,7 @@ function Login() {
             <p className="text-right text-sm text-gray-700/60 tracking-tight pt-5 hidden">
               Not have an account?{" "}
               <Link
-                className="text-blue-600 font-medium hover:underline dm-sans-bold"
+                className="text-blue-600 font-normal hover:underline dm-sans-bold"
                 to="/signup"
               >
                 signup

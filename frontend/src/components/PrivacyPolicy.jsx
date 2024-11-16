@@ -46,7 +46,7 @@ function PrivacyPolicy() {
           <p>
             <strong>Company</strong> (referred to as either &quot;the
             Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in
-            this Agreement) refers to SwiftCrab, House 1146, Road 9/A, Avenue
+            this Agreement) refers to Educrafters, House 1146, Road 9/A, Avenue
             10, Mirpur DOHS, Dhaka - 1216.
           </p>
         </li>
@@ -106,13 +106,13 @@ function PrivacyPolicy() {
         </li>
         <li>
           <p>
-            <strong>Website</strong> refers to SwiftCrab, accessible from{" "}
+            <strong>Website</strong> refers to Educrafters, accessible from{" "}
             <a
-              href="https://swiftcrab.com"
+              href="/"
               rel="external nofollow noopener"
               target="_blank"
             >
-              https://swiftcrab.com/
+              https://educrafters.vercel.app/
             </a>
           </p>
         </li>
@@ -536,10 +536,10 @@ function PrivacyPolicy() {
       </p>
       <h2>Contact Us</h2>
       <p>
-        If you have any questions about this Privacy Policy, You can contact us:
+        If you have any questions about this Privacy Policy, You can contact us.
       </p>
       <ul>
-        <li>By email: swiftcrab.hq@gmail.com</li>
+        {/* <li>By email: swiftcrab.hq@gmail.com</li> */}
       </ul>
     </div>
   );

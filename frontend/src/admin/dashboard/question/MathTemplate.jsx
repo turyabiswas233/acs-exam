@@ -8,7 +8,7 @@ function MathTemplate({ tex, image, options }) {
           src={URL.createObjectURL(image)}
         />
       )}
-      <p className="poppins-medium">
+      <p className="inter-medium">
         <Latex
           children={`${tex
             ?.replaceAll("<math>", "$")

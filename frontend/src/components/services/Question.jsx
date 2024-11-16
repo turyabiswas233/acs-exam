@@ -180,7 +180,7 @@ function Question() {
   if (user && isAuthenticated)
     return (
       <div
-        className={`h-svh bg-swhite overflow-y-auto p-0 m-0 poppins-regular relative rounded-md bangla-font`}
+        className={`h-svh bg-swhite overflow-y-auto p-0 m-0 inter-regular relative rounded-md bangla-font`}
       >
         <div className="questionsList py-10 px-2 space-y-6  mx-auto max-w-screen-xl">
           <h2 className="text-center text-5xl font-bold text-black">

@@ -7,6 +7,7 @@ const exmType = [
   "Medical",
   "Academic",
   "Board",
+  "নিবন্ধন ১৯",
 ];
 const question = new mongoose.Schema({
   question: { type: String, required: true, maxLength: 20000 },
@@ -28,7 +29,7 @@ const exam = new mongoose.Schema({
   },
   examtype: { type: String, required: true, enum: exmType },
   questype: { type: String, required: true },
-  examclass: { type: String, required: true, enum: ["HSC", "SSC"] },
+  examclass: { type: String, required: true, enum: ["HSC", "SSC", "Job Exam"] },
   questionsList: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Question", default: [] },
   ],

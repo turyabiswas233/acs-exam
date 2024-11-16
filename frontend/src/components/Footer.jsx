@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "/swiftcrab.svg";
+import logo from "/logo_dark.svg";
 
 function Footer() {
   return (
@@ -11,7 +11,7 @@ function Footer() {
           <img
             src={logo}
             className="mb-4"
-            alt="Swiftcrab Logo"
+            alt="Educrafters Logo"
             width={100}
             height={100}
           />{" "}
