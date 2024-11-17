@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 const API_URL = import.meta.env.APP_URL;
+
 function Leaderboard() {
   const [list, setList] = useState([]);
   const { user } = useAuth();

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../context/AuthContext";
+// import { useAuth } from "../../../context/AuthContext";
 import axios from "axios";
 import { MdCheckCircleOutline, MdClose } from "react-icons/md";
 
@@ -7,7 +7,8 @@ const API_URL = import.meta.env.APP_URL;
 
 function ExamReview({ id }) {
   const [data, setData] = useState({});
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user =  JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
 
   const checkPastExam = async () => {
     const response = await axios.get(

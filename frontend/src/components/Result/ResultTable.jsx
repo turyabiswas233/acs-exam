@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+// import { useAuth } from "../../context/AuthContext";
 
 function ResultTable() {
   const [data, setData] = useState([]);
-  const { user } = useAuth();
+  // const { user } = useAuth();
+
+  const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
+
   useEffect(() => {
     const fetchResults = async () => {
       let url = import.meta.env.APP_URL || "";

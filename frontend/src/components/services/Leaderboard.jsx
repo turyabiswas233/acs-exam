@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../../context/AuthContext";
+// import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 const API_URL = import.meta.env.APP_URL;
+
 function Leaderboard() {
-  const { user, loading, isAuthenticated } = useAuth();
+  // const { user, loading, isAuthenticated } = useAuth();
+  const [loading, setLoading] = useState(false);
+
+  // { user } = useAuth()
+  const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const fetchLeaderboard = async () => {
-    if (isAuthenticated)
+    // if (isAuthenticated)
       try {
         axios.get(API_URL + `api/live-exam/exam/${user?.uid}`).then((res) => {
           if (res.data.status) {

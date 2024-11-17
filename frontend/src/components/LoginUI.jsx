@@ -38,9 +38,9 @@ function Login() {
       );
       if (data?.status) {
         setUser(data?.user);
-        await localStorage.setItem("USER_TOKEN", data?.user?.uid);
-        await localStorage.setItem("PUBLIC_USER", JSON.stringify(data?.user));
-        window.location.reload();
+        localStorage.setItem("USER_TOKEN", data?.user?.uid);
+        localStorage.setItem("PUBLIC_USER", JSON.stringify(data?.user));
+        window.location = "/";
       }
     } catch (error) {}
 

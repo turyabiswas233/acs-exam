@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useAuth } from "../../context/AuthContext";
+// import { useAuth } from "../../context/AuthContext";
 import { NavLink } from "react-router-dom";
 
 const API_URL = import.meta.env.APP_URL;
 
 function Question() {
-  const { user, isAuthenticated } = useAuth();
+  // const { user, isAuthenticated } = useAuth();
+
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
+  );
+
   const [data, setdata] = useState([]);
   const fetchQuestion = async () => {
     try {
@@ -50,7 +55,9 @@ function Question() {
       {!user && (
         <h3 className="text-2xl text-center">Please login to view the exams</h3>
       )}
-      {isAuthenticated == 1 && data?.length > 0 ? (
+
+       {/* isAuthenticated == 1 && data?.length > 0  */}
+      { user && data?.length > 0 ? (
         <div>
           <h1 className="text-4xl font-bold text-center text-sblack underline">
             Exam List

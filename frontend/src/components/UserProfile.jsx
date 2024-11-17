@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
+// import { AuthContext } from "../context/AuthContext";
 import { auth } from "../Config/firebase-config";
 import axios from "axios";
 import {
@@ -15,7 +15,7 @@ import Toast from "./Toast";
 import { LuLoader } from "react-icons/lu";
 
 function UserProfile() {
-  const [user, isAuthenticated] = useContext(AuthContext);
+  // const [user, isAuthenticated] = useContext(AuthContext);
   const [data, setData] = useState(null);
   const [fname, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,6 +24,9 @@ function UserProfile() {
   const [oldPass, setOPass] = useState("");
   const [loading, setload] = useState(true);
   const [err, seterr] = useState("");
+
+  const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null;
+  console.log("Profile:", user);
 
   const [toast, showToast] = useState("");
   const navigate = useNavigate();
@@ -46,13 +49,13 @@ function UserProfile() {
 
   useEffect(() => {
     if (user) {
-      setEmail(data?.email);
-      setPhone(data?.phone);
-      setName(data?.displayName);
+      // setEmail(data?.email);
+      setPhone(user?.phone);
+      setName(user?.displayName);
 
       setload(false);
     }
-  }, [user, data]);
+  }, [user]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -60,35 +63,36 @@ function UserProfile() {
     }, 5000);
   }, []);
 
-  async function fetchUser() {
-    let url = import.meta.env.APP_URL || "";
+  // async function fetchUser() {
+  //   let url = import.meta.env.APP_URL || "";
 
-    try {
-      setload(true);
-      const response = await axios.get(`${url}api/user`, {
-        method: "GET",
-        params: {
-          uid: auth?.currentUser?.uid,
-        },
-      });
-      if (response.status !== 200) {
-        throw new Error("Failed to fetch user");
-      }
-      const resultData = await response.data;
+  //   try {
+  //     setload(true);
+  //     const response = await axios.get(`${url}api/user`, {
+  //       method: "GET",
+  //       params: {
+  //         uid: auth?.currentUser?.uid,
+  //       },
+  //     });
+  //     if (response.status !== 200) {
+  //       throw new Error("Failed to fetch user");
+  //     }
+  //     const resultData = await response.data;
 
-      setData(resultData?.user);
-      // console.log(resultData);
-    } catch (error) {
-      console.error("Error fetching results:", error);
-    } finally {
-      setload(false);
-    }
-  }
-  useEffect(() => {
-    fetchUser();
-  }, [user]);
+  //     setData(resultData?.user);
+  //     // console.log(resultData);
+  //   } catch (error) {
+  //     console.error("Error fetching results:", error);
+  //   } finally {
+  //     setload(false);
+  //   }
+  // }
 
-  // ===================== update USER profile ==================
+  // useEffect(() => {
+  //   fetchUser();
+  // }, [user]);
+
+  // ================= update USER profile ==================
   async function updateProfileInfo(e) {
     e.preventDefault();
     const url = import.meta.env.APP_URL;
@@ -97,7 +101,7 @@ function UserProfile() {
       return;
     } else
       try {
-        if(data?.displayName === fname && data?.phone === phone){
+        if (data?.displayName === fname && data?.phone === phone) {
           alert("Nothing to update");
 
           return;
@@ -154,26 +158,29 @@ function UserProfile() {
           <div>
             <h1 className="text-3xl text-slate-800 font-bold flex gap-3">
               Account Settings{" "}
-              {isAuthenticated == 1 ? (
-                <MdVerified color="#2277cc" size={24} />
-              ) : (
-                <button
-                  className="bg-green-400 px-4 py-2 text-base rounded-md hover:bg-green-500"
-                  type="button"
-                  onClick={() => {
-                    const url = import.meta.env.APP_URL;
-                    sendEmailVerification(user, {
-                      url: `${url}settings`,
-                    })
-                      .then(() => {
-                        showToast("sent");
+              {
+                // isAuthenticated == 1 ? (
+                user ? (
+                  <MdVerified color="#2277cc" size={24} />
+                ) : (
+                  <button
+                    className="bg-green-400 px-4 py-2 text-base rounded-md hover:bg-green-500"
+                    type="button"
+                    onClick={() => {
+                      const url = import.meta.env.APP_URL;
+                      sendEmailVerification(user, {
+                        url: `${url}settings`,
                       })
-                      .catch((err) => showToast("error"));
-                  }}
-                >
-                  Verify now
-                </button>
-              )}
+                        .then(() => {
+                          showToast("sent");
+                        })
+                        .catch((err) => showToast("error"));
+                    }}
+                  >
+                    Verify now
+                  </button>
+                )
+              }
               {toast == "sent" && (
                 <Toast
                   count={true}
@@ -200,6 +207,8 @@ function UserProfile() {
               onClick={async () =>
                 await auth.signOut().then(() => {
                   navigate("/");
+                  localStorage.clear();
+                  window.location.reload();
                 })
               }
             >
@@ -212,34 +221,29 @@ function UserProfile() {
             <h2 className="text-green-600 underline text-xl underline-offset-4">
               Current status{" "}
               <span className="text-sm text-blue-400 ">
-                {`[${
+                {/* {`[${
                   isAuthenticated == 1
                     ? "Authentic"
                     : isAuthenticated == 0
                     ? "Not verified"
                     : ""
-                }]`}
+                }]`} */}
               </span>
             </h2>
-            {data != null ? (
+            {user != null ? (
               <div className="w-full">
                 <div className="flex justify-between w-full">
                   <div>
-                    <p className="hidden">
-                      UID Status:{" "}
-                      {data?.uid === user?.uid
-                        ? "This account is correct"
-                        : "Wrong account"}
-                    </p>
-                    <p>Name: {data?.displayName}</p>
-                    <p>Email: {data?.email}</p>
-                    <p>Phone: {data?.phone}</p>
+                    
+                    <p>Name: {user?.displayName}</p>
+                    {/* <p>Email: {user?.email}</p> */}
+                    <p>Phone: {user?.phone}</p>
                     <p>
                       Logged in with:{" "}
-                      {auth.currentUser.providerData[0].providerId}
+                      {/* {auth.currentUser.providerData[0].providerId} */}
                     </p>
                   </div>
-                  {false && auth.currentUser.providerData[0].photoURL ? (
+                  {/* {false && auth.currentUser.providerData[0].photoURL ? (
                     <img
                       className="object-cover w-36 h-auto rounded-full"
                       src={auth.currentUser.providerData[0].photoURL}
@@ -247,7 +251,7 @@ function UserProfile() {
                       width={250}
                       height={250}
                     />
-                  ) : null}
+                  ) : null} */}
                 </div>
 
                 <div className="flex-col md:flex-row gap-2 md:justify-between hidden">
@@ -269,14 +273,14 @@ function UserProfile() {
           <div className=" w-20 h-20 rounded-full border-8 border-black/50 border-t-black mx-auto animate-spin "></div>
         ) : (
           <>
-            {isAuthenticated === 0 && (
+            {/* {isAuthenticated === 0 && (
               <p className="text-rose-500 font-bold text-xs text-center mt-10">
                 *Verify first to change informations.
               </p>
-            )}
+            )} */}
             <div
               className={`flex mx-5 flex-col lg:grid lg:grid-cols-2 gap-10 ${
-                isAuthenticated == 0 &&
+                //isAuthenticated == 0 &&
                 "grayscale opacity-50 pointer-events-none cursor-not-allowed"
               }`}
             >
@@ -362,22 +366,22 @@ function UserProfile() {
               </form>
               <form
                 className={`hidden relative mx-auto w-full bg-slate-900 px-5 py-10 rounded-xl text-blue-100 ${
-                  auth.currentUser.providerData[0].providerId ===
-                    "google.com" &&
+                  // auth.currentUser.providerData[0].providerId ===
+                  //   "google.com" &&
                   " aria-disabled:bg-opacity-70 aria-disabled:cursor-not-allowed aria-disabled:pointer-events-none"
                 }`}
-                aria-disabled={
-                  auth.currentUser.providerData[0].providerId === "google.com"
-                }
+                // aria-disabled={
+                //   auth.currentUser.providerData[0].providerId === "google.com"
+                // }
                 onSubmit={(e) => e.preventDefault()}
               >
-                {auth.currentUser.providerData[0].providerId ===
+                {/* {auth.currentUser.providerData[0].providerId ===
                   "google.com" && (
                   <p className="text-rose-600 bg-white px-2 text-sm">
                     ** You are logged in with google. No need to change password
                     **
                   </p>
-                )}
+                )} */}
                 {toast == "password" && (
                   <Toast message={"Password changed"} success={true} />
                 )}
@@ -450,10 +454,10 @@ function UserProfile() {
                   change password
                 </button>
               </form>
-              <div className="hidden">
+              {/* <div className="hidden">
                 <SSCForm brd={board} data={data} />
                 <HSCForm brd={board} data={data} />
-              </div>
+              </div> */}
             </div>
           </>
         )}
@@ -525,6 +529,7 @@ const HSCForm = ({ brd, data }) => {
             onChange={(e) =>
               setHsc((pre) => ({ ...pre, board: e.target.value }))
             }
+            value={"Defalt"}
           >
             <optgroup>
               <option
@@ -557,7 +562,10 @@ const HSCForm = ({ brd, data }) => {
             }
           />
         </section>
-        <section className="p-5 rounded-lg space-y-2 bg-slate-800/60 my-4 ring-2 ring-slate-200/20 w-full grid  gap-1">
+        <section
+          value={""}
+          className="p-5 rounded-lg space-y-2 bg-slate-800/60 my-4 ring-2 ring-slate-200/20 w-full grid  gap-1"
+        >
           <label htmlFor="hreg" className="block text-gray-200 font-bold mb-2">
             Registration
           </label>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+// import { useAuth } from "../../context/AuthContext";
 import { auth } from "../../Config/firebase-config";
 import TakeExam from "./components/TakeExam";
 import ExamFinish from "./components/ExamFinish";
@@ -16,7 +16,8 @@ const CONST_EXAM_PAGE_LOADING = "exam_page_loading";
 function ExamPage() {
   const { id } = useParams();
 
-  const { user, isAuthenticated } = useAuth();
+  // const { user, isAuthenticated } = useAuth();
+  const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
   const [data, setdata] = useState({});
   // const [ mcqAnswers, setMcqAnswers] = useState([]);
 
@@ -73,7 +74,7 @@ function ExamPage() {
 }
 
 export default ExamPage;
-function durationToSecond(time) {
-  return Number(time?.hh || 0) * 3600 + Number(time?.mm || 0) * 60;
-}
+// function durationToSecond(time) {
+//   return Number(time?.hh || 0) * 3600 + Number(time?.mm || 0) * 60;
+// }
 // questions (data) majhe majhe load hoyna api theke

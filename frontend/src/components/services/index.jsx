@@ -22,7 +22,8 @@ const linklist = [
   },
 ];
 function Services() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
   return (
     <div className="p-2">
       <div className="flex flex-col lg:flex-row gap-3">

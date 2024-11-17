@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../../context/AuthContext";
+// import { useAuth } from "../../../context/AuthContext";
 import ExamQuestion from "./ExamQuestion";
 import Timer from "./Timer";
 import { auth } from "../../../Config/firebase-config";
@@ -8,7 +8,8 @@ import { auth } from "../../../Config/firebase-config";
 const API_URL = import.meta.env.APP_URL;
 
 function TakeExam({ id, onFinishDemand }) {
-  const { user, isAuthenticated } = useAuth();
+  // const { user, isAuthenticated } = useAuth();
+  const user =  JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
   const [data, setdata] = useState({});
   const { load, setLoad } = useState(false);
   const [mcqAnswers, setMcqAnswers] = useState([]);
@@ -43,7 +44,7 @@ function TakeExam({ id, onFinishDemand }) {
   useEffect(() => {
     fetchQuestion();
     console.log(data);
-    console.log(auth);
+
   }, []);
 
   const dataloaded = Object.keys(data).length > 0;
@@ -133,7 +134,14 @@ function TakeExam({ id, onFinishDemand }) {
             }
           )
           .then((res) => {
+            // clear variables
+            const public_user = localStorage.getItem("PUBLIC_USER");
+            const user_token = localStorage.getItem("USER_TOKEN");
             localStorage.clear();
+            localStorage.setItem("PUBLIC_USER", public_user);
+            localStorage.setItem("USER_TOKEN", user_token);
+
+            localStorage.clear("KEY_EXAM_STARTED_TIME_${id}");
             data.questionsList.forEach((q) => {
               const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
               localStorage.removeItem(KEY_MCQ_ANSWERS);

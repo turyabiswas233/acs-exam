@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+// import { useAuth } from "../../context/AuthContext";
 
 function ApplyTable() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user } = useAuth();
+  // const { user } = useAuth();
+
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
+  );
+  
   useEffect(() => {
     const fetchData = async () => {
       if (user)

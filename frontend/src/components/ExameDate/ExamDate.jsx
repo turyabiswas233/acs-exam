@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../../context/AuthContext";
+// import { useAuth } from "../../context/AuthContext";
 
 function ExamDate() {
   const [exams, setExams] = useState([]);
   const [error, setError] = useState(null);
-  const { user } = useAuth();
+  // const { user } = useAuth();
+
+  const user  = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
+
   useEffect(() => {
     const getExamdate = async () => {
       if (user == null) return;

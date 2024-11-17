@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import axios from "axios";
 import Input from "./Input";
 import { auth } from "../Config/firebase-config";
-import { useAuth } from "../context/AuthContext";
+// import { useAuth } from "../context/AuthContext";
 
 function Signup() {
   const [fname, setName] = useState("");
@@ -39,7 +39,10 @@ function Signup() {
 
   const [loading, setload] = useState(false);
   const navigate = useNavigate();
-  const { user, setAuthentication } = useAuth();
+  //const { user, setAuthentication } = useAuth();
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
+  );
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -100,7 +103,7 @@ function Signup() {
     }
   }, [error]);
   useEffect(() => {
-    if (user && !user?.emailVerified) navigate("/settings");
+    // if (user && !user?.emailVerified) navigate("/settings");
     if (user) navigate("/");
   }, []);
   const [eduCheck, setEduCheck] = useState({

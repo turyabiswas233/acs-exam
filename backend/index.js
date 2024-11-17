@@ -33,6 +33,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URI;
 const BASE_URL = process.env.BASE_URL.split(",");
+
 // Connect to MongoDB
 mongoose
   .connect(URI)

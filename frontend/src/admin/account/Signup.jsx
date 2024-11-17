@@ -5,8 +5,13 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../Config/firebase-config";
 import { useAuth } from "../../context/AuthContext";
 import { MdEmail, MdFace } from "react-icons/md";
+
 function Signup() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
+  );
+  
   const [adminInfo, setAdminInfo] = useState({
     f_name: "",
     email: "",

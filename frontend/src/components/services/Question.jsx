@@ -4,7 +4,8 @@ import { useState, useEffect, useLayoutEffect } from "react";
 import axios from "axios";
 import Timer from "./components/Timer";
 import ScoreBoard from "./components/ScoreBoard";
-import { useAuth } from "../../context/AuthContext";
+// import { useAuth } from "../../context/AuthContext";
+
 const subList = [
   "BANGLA 1ST PAPER",
   "BANGLA 2ND PAPER",
@@ -41,7 +42,8 @@ export const levels = ["MCQ", "CQ"];
 function Question() {
   const API_URL = import.meta.env.APP_URL;
 
-  const { user, isAuthenticated } = useAuth();
+  //const { user, isAuthenticated } = useAuth();
+  const user =  JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
   const [error, setError] = useState({ message: "" });
   const [selectedSub, setSelectSub] = useState("");
   const [selectChap, setSelectChap] = useState("");
@@ -177,7 +179,8 @@ function Question() {
     };
   }, [data, finish]);
 
-  if (user && isAuthenticated)
+  // if (user && isAuthenticated)
+  if( user )
     return (
       <div
         className={`h-svh bg-swhite overflow-y-auto p-0 m-0 inter-regular relative rounded-md bangla-font`}
