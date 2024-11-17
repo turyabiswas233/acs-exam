@@ -27,7 +27,7 @@ function Navbar() {
       </li> */}
     </>
   );
-  const { user } = useAuth();
+  const user = localStorage.getItem("USER_TOKEN");
   const navigate = useNavigate();
   return (
     <>
@@ -40,7 +40,8 @@ function Navbar() {
               to="/"
               className="btn btn-ghost normal-case text-base sm:text-xl flex items-center "
             >
-              <img src={logo} alt="Logo" className="w-18 h-8 mr-2" /> Educrafters
+              <img src={logo} alt="Logo" className="w-18 h-8 mr-2" />{" "}
+              Educrafters
             </Link>
           </div>
 

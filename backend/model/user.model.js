@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  uid: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  displayName: { type: String, required: true },
-  phone: { type: String },
-  hsc: { type: Object },
-  ssc: { type: Object },
-  createdAt: { type: Date, default: Date.now },
+  uid: { type: mongoose.Schema.Types.String, required: true, unique: true },
+  // email: { type: mongoose.Schema.Types.String, required: true, unique: true },
+  displayName: { type: mongoose.Schema.Types.String, required: true },
+  phone: { type: mongoose.Schema.Types.String, require: true, unique: true },
+  // hsc: { type: Object },
+  // ssc: { type: Object },
+  createdAt: { type: mongoose.Schema.Types.Date, default: new Date() },
 });
 
 const User = mongoose.model("User", userSchema);
