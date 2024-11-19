@@ -1,34 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Toast from "./Toast";
 import Input from "./Input";
 import axios from "axios";
-
+import { LuLoader } from "react-icons/lu";
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [displayName, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const [toast, showToast] = useState(false);
-  const navigate = useNavigate();
+  const [load, setLoad] = useState(false);
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
   );
-  const userToker = localStorage.getItem("USER_TOKEN");
+  const userToken = localStorage.getItem("USER_TOKEN");
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError("Please fill in both Name and Phone Number.");
+    const regex = /^\+8801[3-9]\d{8}$/;
+    if (
+      displayName.length < 3 ||
+      phone?.length < 11 ||
+      regex.test(phone) === false
+    ) {
+      if (regex.test(phone) == false) {
+        setError("Please add +88 before phone number");
+      } else setError("Please fill both Name and Phone in valid format.");
       return;
     }
 
     const url = import.meta.env.APP_URL;
     try {
+      setLoad(true);
       const { data } = await axios.post(
         `${url}api/user`,
         {
-          displayName: email,
-          phone: password,
-          uid: `${Date.now()}_${email}`,
+          displayName: displayName,
+          phone: phone,
+          uid: `${Date.now()}_${displayName}`,
         },
         {
           headers: {
@@ -42,7 +49,11 @@ function Login() {
         localStorage.setItem("PUBLIC_USER", JSON.stringify(data?.user));
         window.location = "/";
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoad(false);
+    }
 
     // try {
     //   // signInWithEmailAndPassword(auth, email, password);
@@ -59,6 +70,30 @@ function Login() {
     //     );
     // }
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const url = import.meta.env.APP_URL;
+      try {
+        const { data } = await axios.get(`${url}api/user`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userToken}`,
+          },
+        });
+        if (data?.user) {
+          setUser(data?.user);
+
+          localStorage.setItem("PUBLIC_USER", JSON.stringify(data?.user));
+          window.location = "/";
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUser();
+  }, [userToken]);
 
   useEffect(() => {
     const loop = setTimeout(() => {
@@ -117,11 +152,11 @@ function Login() {
   // }, [user]);
   return (
     <div className="w-full h-dvh bg-sblack flex justify-center items-center relative">
-      {user !== null && error === "success" && (
+      {user && error === "success" && (
         <Toast success={true} message={"Login successful"} count={toast} />
       )}
 
-      {user != null ? (
+      {user ? (
         <div className="modal-box grid bg-blue-900/20 text-blue-200 place-items-center ring-1 ring-blue-400">
           <h2 className="w-full rounded-lg text-lg">
             <span>Name: {user?.displayName}</span> <br />
@@ -153,11 +188,11 @@ function Login() {
           <Input
             id={"displayName"}
             name={"displayName"}
-            title={"displayName"}
+            title={"full name"}
             type={"displayName"}
             required={true}
-            setValue={(e) => setEmail(e.target.value)}
-            value={email}
+            setValue={(e) => setName(e.target.value)}
+            value={displayName}
             placeholder={"Your full name"}
           />
 
@@ -165,11 +200,12 @@ function Login() {
             id={"phone"}
             name={"phone"}
             title={"phone"}
-            type={"phone"}
+            type={"tel"}
             required={true}
-            setValue={(e) => setPassword(e.target.value)}
-            value={password}
-            placeholder={"Your Phone Number"}
+            minlen={11}
+            setValue={(e) => setPhone(e.target.value)}
+            value={phone}
+            placeholder={"+8801xxxxxxxxx"}
           />
 
           {error && <p className="text-red-500 mt-2">{error}</p>}
@@ -179,8 +215,9 @@ function Login() {
               className="w-full btn border-none bg-blue-600 hover:bg-blue-700 text-white dm-sans-medium"
               type="submit"
               required={true}
+              disabled={load}
             >
-              Sign In
+              {load ? <LuLoader className="animate-spin" size={30} /> : "Sign In"}
             </button>
             <p className="text-blue-700 text-lg text-left mt-5 mb-4">
               {/* If you are new to login, you may need to provide additional info

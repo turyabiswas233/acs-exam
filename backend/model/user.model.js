@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   uid: { type: mongoose.Schema.Types.String, required: true, unique: true },
   // email: { type: mongoose.Schema.Types.String, required: true, unique: true },
-  displayName: { type: mongoose.Schema.Types.String, required: true },
+  displayName: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+    unique: true,
+  },
   phone: { type: mongoose.Schema.Types.String, require: true, unique: true },
   // hsc: { type: Object },
   // ssc: { type: Object },

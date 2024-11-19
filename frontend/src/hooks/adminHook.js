@@ -71,7 +71,7 @@ const fetchAdminUsers = (limit, page, p) => {
   }, [page, p]);
   return { list, size, error, p };
 };
-const fetchAdminStudents = (limit, page, p, jwt) => {
+const fetchAdminStudents = (limit, page, jwt) => {
   const [list, setData] = useState([]);
   const [error, seterror] = useState("");
   const [size, setSize] = useState(0);
@@ -79,7 +79,6 @@ const fetchAdminStudents = (limit, page, p, jwt) => {
     try {
       const response = await axios.get(`${DB_URL}sadmin/sudo/students`, {
         params: {
-          permission: p,
           limit: limit,
           page: page,
         },
@@ -98,8 +97,8 @@ const fetchAdminStudents = (limit, page, p, jwt) => {
   };
   useEffect(() => {
     getData();
-  }, [page, p]);
-  return { list, size, error, p };
+  }, [page]);
+  return { list, size, error };
 };
 const updateAdminUser = async (id, isVerified) => {
   try {

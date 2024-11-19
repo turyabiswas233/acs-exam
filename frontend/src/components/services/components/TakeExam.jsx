@@ -9,9 +9,10 @@ const API_URL = import.meta.env.APP_URL;
 
 function TakeExam({ id, onFinishDemand }) {
   // const { user, isAuthenticated } = useAuth();
-  const user =  JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
+  const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null;
+  const UID = localStorage.getItem("USER_TOKEN");
   const [data, setdata] = useState({});
-  const { load, setLoad } = useState(false);
+  const [load, setLoad] = useState(false);
   const [mcqAnswers, setMcqAnswers] = useState([]);
 
   const fetchQuestion = async () => {
@@ -44,7 +45,6 @@ function TakeExam({ id, onFinishDemand }) {
   useEffect(() => {
     fetchQuestion();
     console.log(data);
-
   }, []);
 
   const dataloaded = Object.keys(data).length > 0;
@@ -101,7 +101,6 @@ function TakeExam({ id, onFinishDemand }) {
     }
 
     if (data.questype == "mcq") {
-      const userId = user?.uid;
       // console.log("USERID: " + userId);
       const startTime = Date.parse(data.starttime);
       const endTime = Date.parse(data.endtime);
@@ -120,49 +119,45 @@ function TakeExam({ id, onFinishDemand }) {
       });
 
       try {
-        axios
-          .post(
-            API_URL + `api/live-exam/submit`,
-            {
-              userId: userId,
-              examId: examId,
-              isLiveExam: isLiveExam,
-              submitData: submitData || [],
-            },
-            {
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-            // clear variables
-            const public_user = localStorage.getItem("PUBLIC_USER");
-            const user_token = localStorage.getItem("USER_TOKEN");
-            localStorage.clear();
-            localStorage.setItem("PUBLIC_USER", public_user);
-            localStorage.setItem("USER_TOKEN", user_token);
+        const res = await axios.post(
+          API_URL + `api/live-exam/submit`,
+          {
+            userId: UID,
+            examId: examId,
+            isLiveExam: isLiveExam,
+            submitData: submitData || [],
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(res);
+        if (res.data?.status) {
+          // clear variables
+          const public_user = localStorage.getItem("PUBLIC_USER");
+          const user_token = localStorage.getItem("USER_TOKEN");
 
-            localStorage.clear("KEY_EXAM_STARTED_TIME_${id}");
-            data.questionsList.forEach((q) => {
-              const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
-              localStorage.removeItem(KEY_MCQ_ANSWERS);
-            });
-            let loop = setTimeout(() => {
-              clearTimeout(loop);
-              onFinishDemand();
-            }, 1000);
-          })
-          .catch((e) => alert("An error occured submitting the exam."))
-          .finally(() => setLoad(false));
+          localStorage.clear();
+          localStorage.setItem("PUBLIC_USER", public_user);
+          localStorage.setItem("USER_TOKEN", user_token);
+
+          // localStorage.clear("KEY_EXAM_STARTED_TIME_${id}");
+          data.questionsList.forEach((q) => {
+            const KEY_MCQ_ANSWERS = `KEY_MCQ_ANSWERS_${id}_${q.id}`;
+            localStorage.removeItem(KEY_MCQ_ANSWERS);
+          });
+
+          // onFinishDemand();
+        } else {
+          alert("An error occured submitting the exam.");
+        }
       } catch (error) {
-        console.log(error);
+        console.warn(error);
         alert("An error occured submitting the exam.");
       } finally {
         setLoad(false);
+        onFinishDemand();
       }
-
-      console.log({ userId, examId, submitData });
-
-      // clear mcq answers from local storage
     }
   };
   if (load) {

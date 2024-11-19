@@ -85,11 +85,12 @@ router.get("/exam/:uid", async (req, res) => {
 // upload|post submition of exam from students
 router.post("/submit", async (req, res) => {
   const { userId, submitData, examId, isLiveExam } = req.body;
-  console.log(req.body);
+
   try {
-    const uid = await User.findOne({ uid: userId });
+    const uid = await User.findOne().where({ uid: userId });
+
     if (!uid) {
-      return res.status(300).send({
+      return res.status(400).send({
         status: false,
         message: "You are not a valied student for this exam",
       });
@@ -97,19 +98,20 @@ router.post("/submit", async (req, res) => {
     const examInfo = await Exam.findById(examId);
     // console.log(examInfo);
     if (examInfo) {
-      const findOld = await SubmitExam.findOne({
+      const findOld = await SubmitExam.findOne().where({
         userId: uid?._id,
         examId: examId,
       });
+
       if (findOld) {
         res.status(203).send({
-          success: true,
+          status: true,
           message: "You have already submitted this exam",
         });
         return;
       } else {
-        const submitExam = new SubmitExam({
-          userId: uid?._id,
+        const submitExam = await SubmitExam.create({
+          userId: uid._id,
           examId,
           submitData,
           isLiveExam,

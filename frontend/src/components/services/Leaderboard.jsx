@@ -6,30 +6,27 @@ const API_URL = import.meta.env.APP_URL;
 
 function Leaderboard() {
   // const { user, loading, isAuthenticated } = useAuth();
-  const [loading, setLoading] = useState(false);
 
   // { user } = useAuth()
-  const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
+  const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null;
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const fetchLeaderboard = async () => {
     // if (isAuthenticated)
-      try {
-        axios.get(API_URL + `api/live-exam/exam/${user?.uid}`).then((res) => {
-          if (res.data.status) {
-            setData(res.data?.data);
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      axios.get(API_URL + `api/live-exam/exam/${user?.uid}`).then((res) => {
+        if (res.data.status) {
+          setData(res.data?.data);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    if (!loading && user) {
-      fetchLeaderboard();
-    }
-  }, [loading, user]);
+    fetchLeaderboard();
+  }, []);
   if (!user)
     return (
       <div className="bg-white rounded-md w-full mx-auto p-5">

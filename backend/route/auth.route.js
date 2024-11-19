@@ -16,7 +16,7 @@ authRouter.post("/", async (req, res) => {
       // console.log("User found in " + user._id);
       res.status(201).send({ message: "old", user });
     } else {
-      user = new User({
+      user = await User.create({
         uid: uid,
         email: email,
         displayName: displayName,
@@ -24,7 +24,7 @@ authRouter.post("/", async (req, res) => {
         hsc: hsc,
         ssc: ssc,
       });
-      await user.save();
+
       res.status(200).send({ message: "User is successfully created.", user });
       // console.log(`User ${user.email} is new`);
     }

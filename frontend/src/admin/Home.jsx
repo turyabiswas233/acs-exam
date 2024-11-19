@@ -1,10 +1,10 @@
 import React from "react";
-import { NavLink  } from "react-router-dom";
-import {fetchAdminInfo} from '../hooks/adminHook'
+import { NavLink } from "react-router-dom";
+import { fetchAdminInfo } from "../hooks/adminHook";
 function AdminHome() {
-  const token = localStorage.getItem('authToken');
-  const { data, error } = fetchAdminInfo(token||'');
-   
+  const token = localStorage.getItem("authToken");
+  const { data, error } = fetchAdminInfo(token || "");
+
   return (
     <div className="container p-10 w-full mx-auto grid justify-center items-center flex-col text-center">
       <h2 className="text-5xl my-10">Admin Page</h2>
@@ -21,9 +21,16 @@ function AdminHome() {
             className={"link-primary text-blue-500 text-2xl"}
             to="/swift-admin/account"
           >
-            login
+            Login
           </NavLink>{" "}
           to control over Educrafters admin.
+        </p>
+        <hr />
+        <p className="text-lg">
+          You can visit Educrafters public portal from{" "}
+          <NavLink className={"link-primary text-blue-500 text-2xl"} to="/">
+            Here
+          </NavLink>{" "}
         </p>
       </div>
     </div>

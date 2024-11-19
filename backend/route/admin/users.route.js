@@ -29,28 +29,36 @@ adminUsersRoute.get("/users", async (req, res) => {
 });
 adminUsersRoute.get("/students", async (req, res) => {
   try {
-    const { permission, limit, page } = req.query;
+    const { limit, page } = req.query;
     const token = req.headers.authorization.split(" ")[1];
-
-    if (!token || !permission)
-      throw new Error({ success: false, message: "Permission Denied" });
+    console.log(req.query, token);
+    if (!token)
+      return res
+        .status(203)
+        .send({ success: false, message: "Permission Denied" });
     else {
-      const UID = token;
-      if (UID) {
+      const UID = await AdminUser.findOne().where("uid").equals(token);
+      console.log(UID);
+      if (UID.permission === true) {
         const response = await User.find()
           .sort({ _id: -1 })
           .limit(limit)
           .skip((page - 1) * limit);
         if (response) {
-          res.status(200).json({
+          return res.status(200).json({
             success: true,
             message: "Got List of Student Users",
             list: response,
             size: response.length,
           });
         } else
-          throw new Error({ success: false, message: "Permission Denied" });
-      } else throw new Error({ success: false, message: "Permission Denied" });
+          return res
+            .status(203)
+            .send({ success: false, message: "Permission Denied" });
+      } else
+        return res
+          .status(203)
+          .send({ success: false, message: "Permission Denied" });
     }
   } catch (error) {
     res

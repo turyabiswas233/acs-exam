@@ -11,14 +11,14 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    let user = await AdminUser.findOne({ uid });
+    let user = await AdminUser.findOne().where({ uid });
     if (user) {
       // console.log("Admin User found in " + user._id);
       res
         .status(404)
         .json({ message: "account with this email found", success: false });
     } else {
-      user = new AdminUser({
+      user = await AdminUser.create({
         uid: uid,
         email: email,
         displayName: displayName,
@@ -26,7 +26,6 @@ router.post("/", async (req, res) => {
         role: role,
         permission: false,
       });
-      await user.save();
       res.status(200).send({
         message: "User is successfully created.",
         user: user,

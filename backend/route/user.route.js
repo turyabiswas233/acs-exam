@@ -7,20 +7,24 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   try {
     const { uid, displayName, phone } = req.body;
+
     const finduser = await User.findOne().where({
       displayName: displayName,
-      phone: phone,
+      phone: phone?.replace("+88", ""),
     });
-    console.log(uid, finduser);
+    console.log("post", uid, finduser);
     if (finduser) {
-      res.status(200).json({ status: true, user: finduser });
-      return;
+      return res.status(200).json({ status: true, user: finduser });
     } else {
-      const newUser = await User.create(req.body);
-      await newUser.save();
-      if (newUser) res.status(201).json({ status: true, user: newUser });
-      else res.status(201).json({ status: false, user: null });
-      return;
+      const newUser = await User.create({
+        uid: uid,
+        displayName: displayName,
+        phone: phone.replace("+88", ""),
+        createdAt: new Date(),
+      });
+      console.log(newUser);
+      if (newUser) return res.status(200).json({ status: true, user: newUser });
+      return res.status(201).json({ status: false, user: null });
     }
   } catch (error) {
     console.error("Error fetching user data:", error); // kire, vul ta kothay :)
@@ -28,19 +32,19 @@ router.post("/", async (req, res) => {
   }
 });
 router.get("/", async (req, res) => {
+  const uid = req.headers.authorization.split(" ")[1];
+  if (!uid) return res.status(204).json({ message: "No user found" });
   try {
-    const { uid } = req.query;
-    let user = await User.findOne({
+    const user = await User.findOne({
       uid: uid,
     });
 
     if (user) {
-      // console.log(user);
-      res.status(200).json({ message: "old_user", user: user });
-    } else res.status(201).json({ message: "new_user" });
+      res.status(200).json({ message: "user found", user: user });
+    } else res.status(201).json({ message: "No user found" });
   } catch (error) {
     console.error("Error fetching user data:", error);
-    res.status(404).json({ error: "Server error" });
+    res.status(404).json({ message: "Server error" });
   }
 });
 

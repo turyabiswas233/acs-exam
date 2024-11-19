@@ -1,20 +1,20 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   MdLogin,
   MdAccountCircle,
   MdDashboard,
   MdDashboardCustomize,
+  MdOutlineLogin,
 } from "react-icons/md";
 
 import logo from "/logo.svg";
 import { auth } from "../Config/firebase-config";
-import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchAdminInfo } from "../hooks/adminHook";
 
 function AdminNavbar() {
-  const [user] = useContext(AuthContext);
-  const { data, error } = fetchAdminInfo(user?.uid || "");
+  const userUid = localStorage.getItem("authToken");
+  const { data, error } = fetchAdminInfo(userUid || "");
   const navigate = useNavigate();
 
   return (
@@ -31,7 +31,7 @@ function AdminNavbar() {
           </button>
         </div>
         <div className="navbar-end text-blue-500 space-x-2 xl:max-w-6xl x-1">
-          {user ? (
+          {data ? (
             <>
               <Link
                 className="btn btn-ghost p-2 hover:bg-blue-600 hover:text-blue-50  aria-hidden:hidden"
@@ -62,7 +62,7 @@ function AdminNavbar() {
                   localStorage.removeItem("authToken");
                   localStorage.removeItem("adminuser");
                   auth.signOut().then(() => {
-                    navigate("/swift-admin/account");
+                    window.location.assign("/swift-admin/account");
                   });
                 }}
               >
@@ -70,7 +70,17 @@ function AdminNavbar() {
                 <span className="hidden md:inline-block">Logout</span>
               </button>
             </>
-          ) : null}
+          ) : (
+            <button
+              className="btn btn-ghost p-2 hover:bg-blue-600 hover:text-blue-50"
+              onClick={() => {
+                window.location.assign("/swift-admin/account");
+              }}
+            >
+              <MdOutlineLogin size={20} />{" "}
+              <span className="hidden md:inline-block">Login</span>
+            </button>
+          )}
         </div>
       </div>
     </nav>

@@ -11,8 +11,7 @@ import {
 } from "firebase/auth";
 import { MdVerified } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import Toast from "./Toast";
-import { LuLoader } from "react-icons/lu";
+import Toast from "./Toast"; 
 
 function UserProfile() {
   // const [user, isAuthenticated] = useContext(AuthContext);
@@ -206,9 +205,8 @@ function UserProfile() {
               type="button"
               onClick={async () =>
                 await auth.signOut().then(() => {
-                  navigate("/");
                   localStorage.clear();
-                  window.location.reload();
+                  window.location.assign("/");
                 })
               }
             >
@@ -217,7 +215,7 @@ function UserProfile() {
           )}
         </header>
         <div>
-          <div className=" w-auto rounded-xl p-5 shadow-lg shadow-slate-100 m-5">
+          <div className=" w-auto rounded-xl p-5 shadow-lg shadow-slate-100 m-5 ring-1 ring-slate-300">
             <h2 className="text-green-600 underline text-xl underline-offset-4">
               Current status{" "}
               <span className="text-sm text-blue-400 ">
@@ -234,11 +232,10 @@ function UserProfile() {
               <div className="w-full">
                 <div className="flex justify-between w-full">
                   <div>
-                    
                     <p>Name: {user?.displayName}</p>
                     {/* <p>Email: {user?.email}</p> */}
                     <p>Phone: {user?.phone}</p>
-                    <p>
+                    <p className="hidden">
                       Logged in with:{" "}
                       {/* {auth.currentUser.providerData[0].providerId} */}
                     </p>
@@ -270,7 +267,7 @@ function UserProfile() {
         </div>
 
         {loading ? (
-          <div className=" w-20 h-20 rounded-full border-8 border-black/50 border-t-black mx-auto animate-spin "></div>
+          <div className=" w-20 h-20 rounded-full border-8 border-slate-300 mx-auto animate-spin "></div>
         ) : (
           <>
             {/* {isAuthenticated === 0 && (
