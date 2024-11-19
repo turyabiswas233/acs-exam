@@ -185,6 +185,20 @@ function Login() {
           <h3 className="text-center font-bold text-3xl lg:text-4xl mb-10">
             Login
           </h3>
+          <ul className="text-xs text-sblack px-5 list-disc my-3">
+            <li>
+              *আপনার প্রদানকৃত তথ্য সঠিক হতে হবে। এই তথ্য দ্বারা আপনার সকল পরীক্ষার রেকর্ড সংরক্ষিত থাকবে।
+            </li>
+            <li>
+              *আপনি সঠিকভাবে নাম পূরণ করুন। পরবর্তীতে নাম পরিবর্তন করা যাবে না।
+            </li>
+            <li>
+              *ফোন নাম্বার এর পূর্বে +88 যোগ করুন। যেমন: +8801xxxxxxxxx
+            </li>
+            <li>
+              *
+            </li>
+          </ul>
           <Input
             id={"displayName"}
             name={"displayName"}
