@@ -32,7 +32,7 @@ function Signin() {
     const loop = setTimeout(() => {
       setStat(null);
       clearTimeout(loop);
-    }, 4000);
+    }, 2300);
     return () => clearTimeout(loop);
   }, [loginStat]);
 
@@ -180,7 +180,7 @@ function Signin() {
               type="button"
               className="text-red-50 bg-red-500 rounded-md px-5 py-1 float-right"
               onClick={() => {
-                window.localStorage.clear();
+                // window.localStorage.clear();
                 window.location.reload();
               }}
             >
