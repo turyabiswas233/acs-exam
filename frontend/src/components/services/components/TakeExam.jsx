@@ -97,7 +97,8 @@ function TakeExam({ id, onFinishDemand }) {
 
     if (data.questype === "cq") {
       // answered were store in indivildual questions submission
-      onFinishDemand();
+      // onFinishDemand();
+      window.location = "/";
     }
 
     if (data.questype == "mcq") {

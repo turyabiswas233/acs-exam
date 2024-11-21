@@ -48,6 +48,7 @@ function ExamPage() {
         <TakeExam
           id={id}
           onFinishDemand={() => {
+            console.log("#####.....FINiSH call..")
             setCurrentScreen(CONST_EXAM_FINISH);
           }}
         />

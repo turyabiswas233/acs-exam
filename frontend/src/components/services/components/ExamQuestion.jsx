@@ -111,6 +111,10 @@ function McqAnswer({ examID, questionID, options, onUpdate }) {
   }, [] );
 
   const markOption = (id)=>{
+
+    if ( checkedAns.length > 0 ) return; 
+    console.log("Returnede!!!!!!!!");
+
     let curAns = checkedAns;
     if ( checkedAns.includes(id) ){
       curAns = checkedAns.filter( iterId => iterId !== id );
@@ -163,7 +167,7 @@ function ExamQuestion({
           {questionNumber}.{" "}
           <span dangerouslySetInnerHTML={{ __html: question.question }}></span>{" "}
         </h2>
-        {question.type == "cq" && (
+        { question.type == "cq" && (
           <CqAnswer examID={examID} questionID={question.id} />
         )}
         {question.type == "mcq" && (
