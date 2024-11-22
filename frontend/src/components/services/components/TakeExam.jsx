@@ -14,7 +14,7 @@ function TakeExam({ id, onFinishDemand }) {
   const [data, setdata] = useState({});
   const [load, setLoad] = useState(false);
   const [mcqAnswers, setMcqAnswers] = useState([]); 
-  const [endTime, setEndTime] = useState(new Date().getTime());
+  const [endTime, setEndTime] = useState(new Date().getTime()); // exam was being submitted before data loading as it was current time
   
   const fetchQuestion = async () => {
     try {

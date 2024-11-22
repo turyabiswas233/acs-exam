@@ -112,15 +112,17 @@ function McqAnswer({ examID, questionID, options, onUpdate }) {
 
   const markOption = (id)=>{
 
-    if ( checkedAns.length > 0 ) return; 
-    console.log("Returnede!!!!!!!!");
+    // if ( checkedAns.length > 0 ) return; 
+    // console.log("Returnede!!!!!!!!");
 
     let curAns = checkedAns;
-    if ( checkedAns.includes(id) ){
-      curAns = checkedAns.filter( iterId => iterId !== id );
-    }else{
-      curAns = [...checkedAns, id];
-    }
+    // if ( checkedAns.includes(id) ){
+    //   curAns = checkedAns.filter( iterId => iterId !== id );
+    // }else{
+    //   curAns = [...checkedAns, id];
+    // }
+    curAns = [ id ];
+
     setCheckedAns(curAns);
     onUpdate(curAns);
     localStorage.setItem(KEY_MCQ_ANSWERS, JSON.stringify( { "answers" : [ ...checkedAns, id]}));

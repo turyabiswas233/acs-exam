@@ -11,7 +11,7 @@ const Timer = ({ start, limit, setFinish, examID, etime }) => {
     let interval;
     if (isRunning) {
       interval = setInterval(() => {
-        if (curtime > etime) {
+        if (curtime >= etime) {
           alert("Time is up! Submitting the exam.");
           clearInterval(interval);
           setFinish();
