@@ -23,6 +23,7 @@ const submitExamSchema = new Schema({
   },
   submitTime: {
     type: Schema.Types.Date,
+    default: new Date(),
   },
 });
 

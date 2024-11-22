@@ -17,7 +17,7 @@ function ExamPage() {
   const { id } = useParams();
 
   // const { user, isAuthenticated } = useAuth();
-  const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
+  const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null;
   const [data, setdata] = useState({});
   // const [ mcqAnswers, setMcqAnswers] = useState([]);
 
@@ -48,19 +48,19 @@ function ExamPage() {
         <TakeExam
           id={id}
           onFinishDemand={() => {
-            console.log("#####.....FINiSH call..")
-            setCurrentScreen(CONST_EXAM_FINISH);
+            console.log("#####.....FINiSH call..");
+            setCurrentScreen(CONST_EXAM_REVIEW);
           }}
         />
       )}
 
-      {currentScreen === CONST_EXAM_FINISH && (
+      {/* {currentScreen === CONST_EXAM_FINISH && (
         <ExamFinish
           onReviewDemand={() => {
             setCurrentScreen(CONST_EXAM_REVIEW);
           }}
         />
-      )}
+      )} */}
 
       {currentScreen === CONST_EXAM_REVIEW && <ExamReview id={id} />}
 

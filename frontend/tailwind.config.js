@@ -1,5 +1,5 @@
 import daisyui from "daisyui";
-import tailwindcssScrollbar from "tailwind-scrollbar";
+// import tailwindcssScrollbar from "tailwind-scrollbar";
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -15,5 +15,5 @@ export default {
       },
     },
   },
-  plugins: [daisyui, tailwindcssScrollbar],
+  plugins: [daisyui],
 };

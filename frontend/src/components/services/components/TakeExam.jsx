@@ -13,8 +13,9 @@ function TakeExam({ id, onFinishDemand }) {
   const UID = localStorage.getItem("USER_TOKEN");
   const [data, setdata] = useState({});
   const [load, setLoad] = useState(false);
-  const [mcqAnswers, setMcqAnswers] = useState([]);
-
+  const [mcqAnswers, setMcqAnswers] = useState([]); 
+  const [endTime, setEndTime] = useState(new Date().getTime());
+  
   const fetchQuestion = async () => {
     try {
       axios
@@ -26,7 +27,9 @@ function TakeExam({ id, onFinishDemand }) {
         })
         .then((res) => {
           if (res.data.status === true) {
-            setdata(res.data?.data);
+            const d = res.data?.data;
+            console.log(d);
+            setdata(d); 
           } else {
             alert("No exam found");
             setdata(null);
@@ -43,8 +46,7 @@ function TakeExam({ id, onFinishDemand }) {
   };
 
   useEffect(() => {
-    fetchQuestion();
-    console.log(data);
+    fetchQuestion(); 
   }, []);
 
   const dataloaded = Object.keys(data).length > 0;
@@ -97,8 +99,8 @@ function TakeExam({ id, onFinishDemand }) {
 
     if (data.questype === "cq") {
       // answered were store in indivildual questions submission
-      // onFinishDemand();
-      window.location = "/";
+      onFinishDemand();
+      // window.location = "/";
     }
 
     if (data.questype == "mcq") {
@@ -120,6 +122,7 @@ function TakeExam({ id, onFinishDemand }) {
       });
 
       try {
+        setLoad(true);
         const res = await axios.post(
           API_URL + `api/live-exam/submit`,
           {
@@ -179,6 +182,7 @@ function TakeExam({ id, onFinishDemand }) {
             limit={durationToSecond(data?.duration)}
             setFinish={finishExam}
             examID={id}
+            etime={endTime}
           />
         )}
       </div>

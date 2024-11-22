@@ -80,7 +80,7 @@ function AllTeachers() {
 
         <p className="text-rose-600">{msg}</p>
 
-        <div className=" my-2 max-h-[50vh] overflow-y-scroll shadow-md rounded-md">
+        <div className=" my-2 max-h-[50vh] overflow-y-auto shadow-md rounded-md">
           <div
             className={`${
               updateStatus?.success

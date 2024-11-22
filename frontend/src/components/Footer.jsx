@@ -4,7 +4,7 @@ import logo from "/logo_dark.svg";
 function Footer() {
   return (
     <div>
-      <footer className="footer p-10 text-base-content bg-gray-50 ">
+      <footer className="footer p-10 bg-gray-100 text-gray-900 ">
         <aside className="mb-6">
           {" "}
           {/* Add margin-bottom for spacing */}

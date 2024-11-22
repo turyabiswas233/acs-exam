@@ -63,7 +63,7 @@ function Leaderboard() {
                 answer: e?.options,
               }));
 
-              markList.forEach((e) => {
+              markList?.forEach((e) => {
                 if (e.submitted) {
                   let flag = true;
                   let d = null;
@@ -98,7 +98,7 @@ function Leaderboard() {
                   <td className="text-center">{correct || 0}</td>
                   <td className="text-center">{inCorrect || 0}</td>
                   <td className="text-center">
-                    {exam?.questionsList?.length - markList?.length}
+                    {exam?.questionsList?.length - submitInfo?.length}
                   </td>
                 </tr>
               );

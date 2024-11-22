@@ -151,11 +151,31 @@ function Login() {
   //   return () => clearTimeout(loop);
   // }, [user]);
   return (
-    <div className="w-full h-dvh bg-sblack flex justify-center items-center relative">
+    <div className="w-full min-h-dvh bg-sblack flex flex-col justify-center items-center relative container p-10">
       {user && error === "success" && (
         <Toast success={true} message={"Login successful"} count={toast} />
       )}
-
+      {/* some tips for students how to login and use the app */}
+      <ul className="list-disc space-y-2 text-justify text-sm">
+        <li>
+          আমাদের প্লাটফর্ম এ লগইন করতে হলে আপনার নাম এবং মোবাইল নাম্বার দিয়ে
+          রেজিস্ট্রেশন করতে হবে। আপনি স্বয়ংক্রিয়ভাবে লগইন হবেন।
+        </li>
+        <li>
+          লগইন এর পরে আপনি হোম পেজে চলে যাবেন। এরপর মেনু সেকশন থেকে our service
+          এ গেলে আপনি ২ টি লিঙ্ক পাবেন।
+        </li>
+        <ol className="list-decimal px-10">
+          <li>
+            Live Exam: এখানে আপনি নতুন ও পুরাতন সব এক্সাম দিতে পারবেন। প্রতি
+            এক্সাম একবার ই দেওয়া যাবে। Exam শেষ হওয়ার এর পরে আপনি এক্সাম দিতে
+            পারবেন। কিন্তু সেটা live হিসেবে কাউন্ট হবে না।
+          </li>
+          <li>
+            Leaderboard: এখানে আপনি আপনার সকল এক্সাম এর স্কোর দেখতে পারবেন।
+          </li>
+        </ol>
+      </ul>
       {user ? (
         <div className="modal-box grid bg-blue-900/20 text-blue-200 place-items-center ring-1 ring-blue-400">
           <h2 className="w-full rounded-lg text-lg">
@@ -185,19 +205,15 @@ function Login() {
           <h3 className="text-center font-bold text-3xl lg:text-4xl mb-10">
             Login
           </h3>
-          <ul className="text-xs text-sblack px-5 list-disc my-3">
+          <ul className="text-sm text-sblack px-5 list-disc my-3">
             <li>
-              *আপনার প্রদানকৃত তথ্য সঠিক হতে হবে। এই তথ্য দ্বারা আপনার সকল পরীক্ষার রেকর্ড সংরক্ষিত থাকবে।
+              আপনার প্রদানকৃত তথ্য সঠিক হতে হবে। এই তথ্য দ্বারা আপনার সকল
+              পরীক্ষার রেকর্ড সংরক্ষিত থাকবে।
             </li>
             <li>
-              *আপনি সঠিকভাবে নাম পূরণ করুন। পরবর্তীতে নাম পরিবর্তন করা যাবে না।
+              আপনি সঠিকভাবে নাম পূরণ করুন। পরবর্তীতে নাম পরিবর্তন করা যাবে না।
             </li>
-            <li>
-              *ফোন নাম্বার এর পূর্বে +88 যোগ করুন। যেমন: +8801xxxxxxxxx
-            </li>
-            <li>
-              *
-            </li>
+            <li>ফোন নাম্বার এর পূর্বে +88 যোগ করুন। যেমন: +8801xxxxxxxxx</li>
           </ul>
           <Input
             id={"displayName"}
@@ -231,7 +247,11 @@ function Login() {
               required={true}
               disabled={load}
             >
-              {load ? <LuLoader className="animate-spin" size={30} /> : "Sign In"}
+              {load ? (
+                <LuLoader className="animate-spin" size={30} />
+              ) : (
+                "Sign In"
+              )}
             </button>
             <p className="text-blue-700 text-lg text-left mt-5 mb-4">
               {/* If you are new to login, you may need to provide additional info

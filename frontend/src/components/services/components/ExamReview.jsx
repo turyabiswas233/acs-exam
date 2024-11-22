@@ -2,19 +2,20 @@ import { useEffect, useState } from "react";
 // import { useAuth } from "../../../context/AuthContext";
 import axios from "axios";
 import { MdCheckCircleOutline, MdClose } from "react-icons/md";
+import ScoreBoard from "./ScoreBoard";
 
 const API_URL = import.meta.env.APP_URL;
 
+const user = JSON.parse(localStorage.getItem("PUBLIC_USER")) || null;
 function ExamReview({ id }) {
   const [data, setData] = useState({});
   // const { user } = useAuth();
-  const user =  JSON.parse(localStorage.getItem("PUBLIC_USER")) || null
 
   const checkPastExam = async () => {
     const response = await axios.get(
       API_URL + `api/live-exam/checkpastexam/${user?.uid}/${id}`
     );
-
+    
     if (response.data) {
       setData(response.data);
     } else {
@@ -22,10 +23,11 @@ function ExamReview({ id }) {
     }
     // console.log("Prev sub", response.data);
   };
-
+  
   useEffect(() => {
+    
     if (user) checkPastExam();
-  }, [user]);
+  }, []);
 
   const options_identifier = ["A", "B", "C", "D"];
   const renderOptions = (ops) => {
@@ -38,29 +40,33 @@ function ExamReview({ id }) {
 
   const questions = data.examInfo?.questionsList.map((q, ind) => {
     const optionEL = q.options.map((op, ind) => {
+      const asoleiCorrect = data?.submitInfo?.submitData
+        ?.find((f) => f?.questionId === q?._id)
+        ?.optionsIds?.includes(op.id)
+        ? op?.isCorrect
+          ? "true"
+          : !op?.isCorrect
+          ? "false"
+          : "skip"
+        : "skip";
       const bgStyle = op.isCorrect
         ? "bg-green-100 rounded-lg ring-2 ring-green-600 my-1"
-        : " ";
+        : asoleiCorrect == "false"
+        ? "bg-red-100 rounded-lg ring-2 ring-red-600 my-1"
+        : "rounded-lg ring-2 ring-slate-600 my-1";
       return (
         <div key={op.id} className={"flex p-1 " + bgStyle}>
-          <span className="text-gray-500 font-bold">
-            {options_identifier[ind]}. &nbsp;
-          </span>
+          <span>{options_identifier[ind]}. &nbsp;</span>
           <p className="">
             <span dangerouslySetInnerHTML={{ __html: op.text }}></span>
             <span></span>
           </p>
-          {data?.submitInfo?.submitData
-            ?.find((f) => f?.questionId === q?._id)
-            ?.optionsIds?.includes(op.id) && op?.isCorrect ? (
+          {asoleiCorrect == "true" ? (
             <MdCheckCircleOutline className="ml-auto font-bold text-lg text-green-600" />
+          ) : asoleiCorrect == "false" ? (
+            <MdClose className="ml-auto font-bold text-lg text-red-500" />
           ) : (
-            data?.submitInfo?.submitData
-              ?.find((f) => f?.questionId === q?._id)
-              ?.optionsIds?.includes(op.id) &&
-            !op?.isCorrect && (
-              <MdClose className="ml-auto font-bold text-lg text-red-500" />
-            )
+            ""
           )}
         </div>
       );
@@ -103,19 +109,20 @@ function ExamReview({ id }) {
       minute: "numeric",
     });
   }
+  
   return (
     <div className="p-5 bg-slate-900">
       <p className="text-sm mb-1"> You have taken this exam </p>
       <p className="text-md mb-0">
-        Class:{" "}
-        <span className="text-white">
-          {data?.examInfo?.examclass || "HSC"}{" "}
-        </span>
-      </p>
-      <p className="text-md mb-0">
         Exam :{" "}
         <span className="text-white">
           {data?.examInfo?.examname || "Demo"}{" "}
+        </span>
+      </p>
+      <p className="text-md mb-0">
+        Class:{" "}
+        <span className="text-white">
+          {data?.examInfo?.examclass || "HSC"}{" "}
         </span>
       </p>
 
@@ -141,7 +148,8 @@ function ExamReview({ id }) {
         </span>
       </p>
 
-      {questions}
+      <ScoreBoard ele={data} />
+      <div>{questions}</div>
 
       <button
         className="btn btn-info px-6 mt-3"

@@ -41,36 +41,45 @@ function Signin() {
     setAdminInfo((pre) => ({ ...pre, [e.target.name]: e.target.value }));
   }
 
-  function getSecretKey(e) {
+  async function getSecretKey(e) {
     e.preventDefault();
     try {
       setLoad(true);
-      signInWithEmailAndPassword(auth, adminInfo.email, pass)
-        .then(async (res) => {
-          if (!data)
-            setStat({
-              success: false,
-              message: "No valid user found as Teacher/Admin",
-            });
-        })
-        .catch((err) => {
-          console.log({ ...err });
-          if (err.code === "auth/invalid-credential")
-            setStat({ success: false, message: "Wrong email or password" });
-          else if (err.code === "auth/too-many-requests")
-            setStat({
-              success: false,
-              message: "Too many attempts. Try later.",
-            });
-          else setStat({ success: false, message: "Failed to login" });
+      const res = await signInWithEmailAndPassword(
+        auth,
+        adminInfo.email,
+        pass
+      ).catch((err) => {
+        console.log({ ...err });
+        if (err.code === "auth/invalid-credential")
+          setStat({ success: false, message: "Wrong email or password" });
+        else if (err.code === "auth/too-many-requests")
+          setStat({
+            success: false,
+            message: "Too many attempts. Try later.",
+          });
+        else setStat({ success: false, message: "Failed to login" });
+      });
 
-          auth.signOut();
-        })
-        .finally(() => {
-          setLoad(false);
+      if (!res.user)
+        setStat({
+          success: false,
+          message: "No valid user found as Teacher/Admin",
         });
+      else window.location.reload();
     } catch (error) {
       console.log(error);
+      console.log({ ...err });
+      if (err.code === "auth/invalid-credential")
+        setStat({ success: false, message: "Wrong email or password" });
+      else if (err.code === "auth/too-many-requests")
+        setStat({
+          success: false,
+          message: "Too many attempts. Try later.",
+        });
+      else setStat({ success: false, message: "Failed to login" });
+
+      auth.signOut();
       setLoad(false);
     } finally {
       setLoad(false);
@@ -79,12 +88,12 @@ function Signin() {
   useEffect(() => {
     let loop;
     if (user) {
-      if (data  == null) {
+      if (data == null) {
         loop = setTimeout(() => {
           auth.signOut();
         }, 1000);
         return () => clearTimeout(loop);
-      } else return ()=> clearInterval(loop);
+      } else return () => clearInterval(loop);
     }
   }, [user, data]);
 
@@ -134,18 +143,20 @@ function Signin() {
               helpTitle={`Your secret key is totally different from your password.\nYou may get it from your office..`}
             />
           )}
-          {load ? (
-            <LuLoader size={32} className="animate-spin" />
-          ) : (
-            <button
-              className="w-full btn border-none bg-blue-600 hover:bg-blue-700 text-white dm-sans-medium"
-              type="submit"
-              required={true}
-              disabled={load}
-            >
-              Sign In
-            </button>
-          )}
+
+          <button
+            className="w-full btn border-none bg-blue-600 hover:bg-blue-700 text-white dm-sans-medium"
+            type="submit"
+            required={true}
+            disabled={load}
+          >
+            {load ? (
+              <LuLoader size={32} className="animate-spin mx-auto" />
+            ) : (
+              "Sign In"
+            )}
+          </button>
+
           <div>
             {loginStat != null &&
               (loginStat?.success ? (
@@ -210,6 +221,7 @@ function Signin() {
                           displayName: adminInfo.f_name,
                         }).then(() => {
                           console.log("login success");
+                          window.location.reload();
                         });
                       } catch (error) {
                         console.log(error);

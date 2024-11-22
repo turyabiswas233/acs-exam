@@ -45,20 +45,32 @@ function Question() {
 
   if (!user)
     return (
-      <div className="bg-white rounded-md w-full mx-auto p-5">
-        <h3 className="text-2xl text-center">Please login to view the Page</h3>
+      <div className="bg-white rounded-md w-full mx-auto p-14 min-h-[50vh] text-slate-950 space-y-6">
+        <h3 className="text-2xl text-center font-semibold">
+          Please login to give all Exams
+        </h3>
+        <ul className="list-disc space-y-2 text-justify">
+          <li>
+            লগইন এর পরে আপনি হোম পেজে চলে আসবেন। এখান থেকে আপনি শুধুমাত্র লাইভ
+            এক্সাম দিতে পারবেন। পুরনো এক্সাম দেওার কোনো সুযোগ থাকবে না।
+          </li>
+          <li>
+            আপনি এক্সাম দিতে ব্যার্থ হলেও প্রশ্নের সঠিক উত্তর গুলো দেখতে পারবেন
+            প্র্যাকটিস এর জন্য।
+          </li>
+        </ul>
       </div>
     );
 
   return (
-    <div className="bg-white rounded-md w-full mx-auto p-5">
+    <div className="bg-white rounded-md w-full mx-auto p-5 min-h-svh">
       {!user && (
         <h3 className="text-2xl text-center">Please login to view the exams</h3>
       )}
 
-       {/* isAuthenticated == 1 && data?.length > 0  */}
-      { user && data?.length > 0 ? (
-        <div>
+      {/* isAuthenticated == 1 && data?.length > 0  */}
+      {user && data?.length > 0 ? (
+        <>
           <h1 className="text-4xl font-bold text-center text-sblack underline">
             Exam List
           </h1>
@@ -66,12 +78,12 @@ function Question() {
             You are viewing all the exam including past and upcoming exams
           </p>
 
-          <div className=" gap-2 flex flex-col md:flex-row flex-wrap">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 p-2">
             {data?.map((exam) => (
               <ExamCard key={exam._id} exam={exam} />
             ))}
           </div>
-        </div>
+        </>
       ) : (
         <h1 className="text-2xl text-center">No exams found</h1>
       )}
@@ -80,10 +92,10 @@ function Question() {
 }
 const ExamCard = ({ exam }) => {
   const starttime = new Date(exam?.starttime);
-  const endtime = new Date(exam?.endtime);
+  const endtime = new Date(exam?.endtime); 
   return (
-    <div className="bg-swhite ring-1 ring-blue-500 shadow-md rounded-md p-4 my-3 space-y-3 shadow-slate-500/30 min-w-max">
-      <h1 className="text-xl font-bold text-blue-500">
+    <div className="bg-swhite ring-1 ring-blue-500 shadow-md rounded-md p-4 my-3 space-y-3 shadow-slate-500/30 min-w-fit hover:bg-blue-50 transition-colors text-sm lg:text-base">
+      <h1 className="text-lg lg:text-xl font-bold text-blue-500">
         {exam?.examname}{" "}
         <span className="text-red-500 font-bold text-sm px-3 animate-pulse">
           {new Date().getTime() > starttime.getTime() &&
@@ -120,7 +132,7 @@ const ExamCard = ({ exam }) => {
       >
         <NavLink
           to={`/services/exam/${exam._id}`}
-          className="bg-blue-800 text-white px-3 py-1 rounded-md hover:bg-blue-500 transition-colors"
+          className="bg-blue-800 text-white px-3 py-1 rounded-sm hover:bg-blue-500 transition-colors"
         >
           Explore exam
         </NavLink>

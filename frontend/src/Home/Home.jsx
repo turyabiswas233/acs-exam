@@ -1,7 +1,6 @@
-import { useEffect } from "react"; 
-import Banner from "../components/Banner";
-import StaticData from "../partial/StaticData";
-
+import { useEffect } from "react";
+import Banner from "../components/Banner"; 
+import ChallengeQuestion  from '../components/services/ChallengeQuestion'
 function App() {
   const checkApi = async () => {
     const url = import.meta.env.APP_URL;
@@ -24,7 +23,9 @@ function App() {
         <Banner />
         {/* <StaticData /> */}
       </div>
-      {/* <Transaction /> */}
+      <div>
+        <ChallengeQuestion />
+      </div>
     </div>
   );
 }

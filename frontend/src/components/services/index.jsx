@@ -14,10 +14,10 @@ const linklist = [
         link: "/services/exam/challenge",
         title: "Live Exam",
       },
-      {
-        link: "/services/leaderboard",
-        title: "Leaderboard",
-      },
+      // {
+      //   link: "/services/leaderboard",
+      //   title: "Leaderboard",
+      // },
     ],
   },
 ];
@@ -27,11 +27,11 @@ function Services() {
   return (
     <div className="p-2">
       <div className="flex flex-col lg:flex-row gap-3">
-        <div className="bg-white text-black p-3 rounded-lg w-full lg:max-w-sm flex flex-col">
+        <div className="bg-white text-black p-3 rounded-lg w-full lg:max-w-sm flex flex-col h-fit">
           <h2 className="text-center p-4 text-xl">Our Services</h2>
           <div className="flex flex-col space-y-2 text-sm">
             {/* navlist below */}
-            <NavList />
+            {/* <NavList /> */}
           </div>
         </div>
         {/* page children outlet */}

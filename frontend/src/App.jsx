@@ -10,7 +10,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="max-h-screen bg-gray-900 text-gray-400  overflow-y-scroll">
+      <div className="max-h-screen bg-gray-900 text-gray-400  overflow-y-auto">
         <Navbar />
         <div className="relative min-h-[50vh] max-w-screen-2xl mx-auto">
           {/* {!user ? null : isAuthenticated == 0 ? (

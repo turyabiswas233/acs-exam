@@ -44,7 +44,7 @@ function AdminDash() {
     );
   else if (data && data?.role == "sudo-admin")
     return (
-      <div className="h-full w-full bg-white text-black inter-medium overflow-y-scroll flex flex-row relative ">
+      <div className="h-full w-full bg-white text-black inter-medium overflow-y-auto flex flex-row relative ">
         <button
           className="bg-blue-50 p-4 rounded-md  text-blue-600 z-50 absolute right-6 top-1 my-2 lg:hidden"
           onClick={() => {
