@@ -17,7 +17,12 @@ const fetchAdminInfo = (jwt) => {
       } else
         try {
           const response = await axios.get(
-            `${DB_URL}sadmin/auth/signin?tokenId=${jwt}`
+            `${DB_URL}sadmin/auth/signin`,
+            {
+              headers:{
+                Authorization: `Token ${jwt}`,
+              }
+            }
           );
           console.log(response.data);
           if (response.data?.user) {

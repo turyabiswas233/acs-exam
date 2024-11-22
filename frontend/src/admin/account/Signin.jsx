@@ -61,15 +61,14 @@ function Signin() {
         else setStat({ success: false, message: "Failed to login" });
       });
 
-      if (!res.user)
-        setStat({
-          success: false,
-          message: "No valid user found as Teacher/Admin",
-        });
-      else window.location.reload();
-    } catch (error) {
-      console.log(error);
-      console.log({ ...err });
+      if (res.user) {
+        window.location.reload();
+      }
+      setStat({
+        success: false,
+        message: "No valid user found as Teacher/Admin",
+      });
+    } catch (err) {
       if (err.code === "auth/invalid-credential")
         setStat({ success: false, message: "Wrong email or password" });
       else if (err.code === "auth/too-many-requests")

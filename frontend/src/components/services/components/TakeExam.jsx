@@ -13,40 +13,37 @@ function TakeExam({ id, onFinishDemand }) {
   const UID = localStorage.getItem("USER_TOKEN");
   const [data, setdata] = useState({});
   const [load, setLoad] = useState(false);
-  const [mcqAnswers, setMcqAnswers] = useState([]); 
-  const [endTime, setEndTime] = useState(new Date().getTime()); // exam was being submitted before data loading as it was current time
-  
+  const [mcqAnswers, setMcqAnswers] = useState([]);
+
   const fetchQuestion = async () => {
     try {
-      axios
-        .get(API_URL + `api/live-exam/${id}`, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((res) => {
-          if (res.data.status === true) {
-            const d = res.data?.data;
-            console.log(d);
-            setdata(d); 
-          } else {
-            alert("No exam found");
-            setdata(null);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          // setdata(null)
-        });
+      setLoad(true);
+
+      const res = await axios.get(API_URL + `api/live-exam/${id}`, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.data.status === true) {
+        const d = res.data?.data;
+        console.log(d);
+        setdata(d);
+      } else {
+        alert("No exam found");
+        setdata(null);
+      }
     } catch (error) {
       alert("Failed");
       console.log(error);
+    } finally {
+      setLoad(false);
     }
   };
 
   useEffect(() => {
-    fetchQuestion(); 
+    fetchQuestion();
   }, []);
 
   const dataloaded = Object.keys(data).length > 0;
@@ -182,7 +179,7 @@ function TakeExam({ id, onFinishDemand }) {
             limit={durationToSecond(data?.duration)}
             setFinish={finishExam}
             examID={id}
-            etime={endTime}
+            etime={new Date(data?.endtime).getTime()}
           />
         )}
       </div>

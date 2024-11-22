@@ -123,7 +123,7 @@ function McqAnswer({ examID, questionID, options, onUpdate }) {
     // }
     curAns = [ id ];
 
-    setCheckedAns(curAns);
+    setCheckedAns(pre=> pre[0] == id? [] : curAns);
     onUpdate(curAns);
     localStorage.setItem(KEY_MCQ_ANSWERS, JSON.stringify( { "answers" : [ ...checkedAns, id]}));
   }

@@ -4,9 +4,9 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { tokenId } = req.query;
+    const tokenId = req.headers.authorization.split(" ")[1];
     if (!tokenId) {
-      res.status(304).json({ error: "no tokenid found", status: "failed" });
+      res.status(204).json({ error: "no tokenid found", status: "failed" });
       return;
     }
 
@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
     });
 
     if (user) {
-      console.log('user found');
+      console.log("user found");
       res.status(200).json({ message: "user found", user: user });
     } else {
       console.log("No user found for this token");
