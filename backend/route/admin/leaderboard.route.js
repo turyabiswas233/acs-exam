@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.get("/exams", async (req, res) => {
   const uid = req.headers.authorization.split(" ")[1];
-  const { limit, shortType } = req.query;
 
   const adminUser = await AdminUser.findOne().where({
     uid: uid,
@@ -23,7 +22,7 @@ router.get("/exams", async (req, res) => {
     res.status(201).json({ status: false, message: "Unauthorized access" });
   } else
     try {
-      const examInfo = await Exam.find();
+      const examInfo = await Exam.find().select(["examname", "examclass"]);
 
       if (examInfo) {
         res.status(200).send({ status: true, list: examInfo });
@@ -37,7 +36,8 @@ router.get("/exams", async (req, res) => {
 
 router.get("/", async (req, res) => {
   const uid = req.headers.authorization.split(" ")[1];
-  const { limit, shortType } = req.query;
+  const { limit, examId,page } = req.query;
+  console.log(limit, examId);
 
   const adminUser = await AdminUser.findOne().where({
     uid: uid,
@@ -54,11 +54,13 @@ router.get("/", async (req, res) => {
     try {
       const examInfo = await SubmitExam.find()
         .limit(limit)
-        .sort({ submitTime: -1 });
+        .skip((page - 1) * limit)
+        .where({ examId: examId });
+      console.log(examInfo);
       const data = await Promise.all(
         examInfo?.map(async (e) => {
           return {
-            user: await User.findOne({ uid: e?.uid }),
+            user: await User.findById(e?.userId)?.select(["displayName"]),
             exam: await Exam.findById(e?.examId)?.populate("questionsList"),
             submitInfo: e.submitData,
           };

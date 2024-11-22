@@ -47,7 +47,7 @@ function AllStudents() {
             <tr className="bg-slate-900 text-swhite">
               {/* <td>UID</td> */}
               <td>Full Name</td>
-              <td>Email</td>
+              {/* <td>Email</td> */}
               <td>Phone</td>
               <td>Joined On</td>
             </tr>
@@ -68,7 +68,7 @@ function AllStudents() {
                   >
                     {/* <td title={uid}>{uid.substring(0, 7)}...</td> */}
                     <td>{user?.displayName}</td>
-                    <td>{user?.email}</td>
+                    {/* <td>{user?.email}</td> */}
                     <td>{user?.phone}</td>
                     <td>
                       <pre>{dateCast(user?.createdAt)}</pre>
